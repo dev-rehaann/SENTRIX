@@ -50,6 +50,11 @@ chain verification failed at seq 17: record_hash mismatch
 sentrix-verify anchor evidence/chain.jsonl --ots-proof evidence/tip.ots
 ```
 
+**A non-zero `anchor` exit does not mean the chain is corrupt or tampered.**
+The `chain` subcommand is the actual chain-integrity verdict. Run it separately
+with the logger public key. `anchor` is a partial, separate timestamp check and
+currently never returns a full anchor-verification success.
+
 This release implements a deliberately limited, offline Bitcoin proof subset.
 It checks that the detached OTS envelope uses SHA-256, that its digest is the
 current chain tip's raw 32-byte `record_hash`, and that append/prepend/SHA-256
@@ -61,10 +66,12 @@ logger public key first to authenticate the complete chain.
 Full Bitcoin anchoring is **stubbed and never reported as success**. A standard
 `.ots` proof stores a block height but not the authoritative block header or
 evidence that the header belongs to Bitcoin's best chain. The requested two
-file inputs therefore cannot independently establish that last fact. When tip
-binding reaches a Bitcoin attestation, this command exits non-zero and says
-that block-header/best-chain verification is not implemented. It never turns a
-calendar response or an unauthenticated public web API into a forensic pass.
+file inputs therefore cannot independently establish that last fact. Complete
+verification needs an independently trusted Bitcoin Core node and a mature
+Rust OTS proof-verification crate. When tip binding reaches a Bitcoin
+attestation, this command exits non-zero and explicitly says that this is not a
+chain-integrity failure. It never turns a calendar response or an
+unauthenticated public web API into a forensic pass.
 
 ## What this tool does not do
 

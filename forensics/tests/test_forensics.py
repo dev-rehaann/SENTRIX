@@ -90,6 +90,75 @@ def test_interoperability_vector_matches_specification() -> None:
     public_key.verify(signature, record_bytes)
 
 
+@pytest.mark.parametrize(
+    ("confidence", "expected_token", "expected_hash", "expected_signature"),
+    [
+        (
+            1.0,
+            "1.0",
+            "427c3016848a90a8d4219a137b486fef785361379e5fbf1864451be59b4e67a0",
+            "1587c4fe5d1499e72b931e8989d481b6d071e56506798e4f0bf9f3df60497d35"
+            "ae95d5b8bb6caa963c7ed285430ef021eb103a3b7675b08dbb9a271f7924480b",
+        ),
+        (
+            0.9532,
+            "0.9532",
+            "db55f077ce463a4ff1015aba74eadd3c5fd6ed31d78f0b77587c7b464f7872ed",
+            "e8eadc6abfdd5cb34d2c5445a0083dbcd44bfb5e6cd11814d9a9ca814b0b7fbd"
+            "1b20d0368b7b57b51565eb620c0f5dd531c6f689ffff791f5ec3457fddd0340b",
+        ),
+        (
+            0.1 + 0.2,
+            "0.30000000000000004",
+            "3aa30e8f2ae3dbf23a617238837d97363be4aef9c9ff99a44d4c5ac44ca233d1",
+            "e1b7ac82d66bfe177c1ba65a77b21ffde25e9e31d0d13075711df1256a85e940"
+            "bfcb62ee7602dda55ab0b58c2e532c9537188dc8f168a7d20cdbecbc08926001",
+        ),
+        (
+            0.00001,
+            "1e-05",
+            "10869621de6d71b59d6a112924e22ae7c152b3247e87695730300ba0bd7c8d27",
+            "5c84aee62bd7bcf98dfe7e9c11bbdafd214869f8e142f6cd340910a67674d8a7c"
+            "c1f1691d8b11c09d2d6a9ecfc185300fc0e5f2c6904e2e3f0c346e180b3a808",
+        ),
+    ],
+)
+def test_binary64_interoperability_vectors_match_specification(
+    confidence: float,
+    expected_token: str,
+    expected_hash: str,
+    expected_signature: str,
+) -> None:
+    unsigned = {
+        "seq": 0,
+        "ts_utc": "2026-07-13T12:00:00Z",
+        "node_id": "node-01",
+        "raw_csi_hash": "1" * 64,
+        "features_hash": "2" * 64,
+        "model_id": "model-v1",
+        "model_config_hash": "3" * 64,
+        "class": "normal",
+        "confidence": confidence,
+        "top_shap": [],
+        "prev_hash": "0" * 64,
+    }
+    signer = Ed25519PrivateKey.from_private_bytes(bytes(range(32)))
+
+    rendered = json.dumps(
+        confidence,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+        allow_nan=False,
+    )
+    record_bytes, record_hash = hash_unsigned_record(unsigned)
+
+    assert rendered == expected_token
+    assert f'"confidence":{expected_token},'.encode() in record_bytes
+    assert record_hash == expected_hash
+    assert signer.sign(record_bytes).hex() == expected_signature
+
+
 def test_valid_chain_passes_verification(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

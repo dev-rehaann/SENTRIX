@@ -126,9 +126,14 @@ pub fn verify_reader<R: BufRead>(
         let seq =
             integer_field(object, "seq").map_err(|reason| ChainError::at(expected_seq, reason))?;
         if seq != expected_seq {
+            let failure = if seq > expected_seq {
+                "sequence gap"
+            } else {
+                "sequence duplicate or out of order"
+            };
             return Err(ChainError::at(
                 expected_seq,
-                format!("seq is {seq}, expected {expected_seq}"),
+                format!("{failure}: found seq {seq}, expected {expected_seq}"),
             ));
         }
         let prev_hash = string_field(object, "prev_hash")
@@ -136,10 +141,7 @@ pub fn verify_reader<R: BufRead>(
         if prev_hash != expected_prev {
             return Err(ChainError::at(
                 expected_seq,
-                format!(
-                    "prev_hash does not match record {}",
-                    expected_seq.saturating_sub(1)
-                ),
+                "hash link broken: prev_hash does not match the expected predecessor",
             ));
         }
 

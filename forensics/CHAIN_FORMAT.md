@@ -165,3 +165,24 @@ The exact stored line is the following bytes plus one final `0x0a`:
 ```json
 {"class":"normal","confidence":0.875,"features_hash":"2222222222222222222222222222222222222222222222222222222222222222","model_config_hash":"3333333333333333333333333333333333333333333333333333333333333333","model_id":"model-v1","node_id":"node-01","prev_hash":"0000000000000000000000000000000000000000000000000000000000000000","raw_csi_hash":"1111111111111111111111111111111111111111111111111111111111111111","record_hash":"ef5d7fe2153bd2653b9e8b2d19044498dfe07016a479a2c831d7e63c774777e8","seq":0,"signature":"872e9ac9e8f2c0fb3473ecfc85d852a622460ae3a9718a35376f21eaa16c547b6a35fb9633b8501b982cb7ab535631ad50ab9b7b58ed3d873a896b059318650f","top_shap":[],"ts_utc":"2026-07-13T12:00:00Z"}
 ```
+
+### Binary64 canonicalization vectors
+
+These additional vectors cover binary64 spellings that are easy to render
+incorrectly outside CPython. They use the same unsigned genesis object and test
+key as the primary vector above. The test private-key seed is the 32 bytes
+`000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f`.
+For each row, the exact `record_bytes` are the primary vector's `record_bytes`
+with only the ASCII token after `"confidence":` replaced by the listed token.
+No other byte changes.
+
+| Python source value | Canonical confidence token | Expected SHA-256 | Expected Ed25519 signature |
+|---|---|---|---|
+| `1.0` | `1.0` | `427c3016848a90a8d4219a137b486fef785361379e5fbf1864451be59b4e67a0` | `1587c4fe5d1499e72b931e8989d481b6d071e56506798e4f0bf9f3df60497d35ae95d5b8bb6caa963c7ed285430ef021eb103a3b7675b08dbb9a271f7924480b` |
+| `0.9532` | `0.9532` | `db55f077ce463a4ff1015aba74eadd3c5fd6ed31d78f0b77587c7b464f7872ed` | `e8eadc6abfdd5cb34d2c5445a0083dbcd44bfb5e6cd11814d9a9ca814b0b7fbd1b20d0368b7b57b51565eb620c0f5dd531c6f689ffff791f5ec3457fddd0340b` |
+| `0.1 + 0.2` | `0.30000000000000004` | `3aa30e8f2ae3dbf23a617238837d97363be4aef9c9ff99a44d4c5ac44ca233d1` | `e1b7ac82d66bfe177c1ba65a77b21ffde25e9e31d0d13075711df1256a85e940bfcb62ee7602dda55ab0b58c2e532c9537188dc8f168a7d20cdbecbc08926001` |
+| `0.00001` | `1e-05` | `10869621de6d71b59d6a112924e22ae7c152b3247e87695730300ba0bd7c8d27` | `5c84aee62bd7bcf98dfe7e9c11bbdafd214869f8e142f6cd340910a67674d8a7cc1f1691d8b11c09d2d6a9ecfc185300fc0e5f2c6904e2e3f0c346e180b3a808` |
+
+The same scalar serializer must also emit `0.0`, `-0.0`, and `-0.125`
+exactly as shown. Negative finite binary64 values are valid inside `top_shap`
+even though values below zero are invalid for `confidence`.

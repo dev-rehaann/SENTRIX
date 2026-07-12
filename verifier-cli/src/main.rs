@@ -27,7 +27,7 @@ enum Command {
         #[arg(long)]
         pubkey: PathBuf,
     },
-    /// Inspect tip binding and the supported Bitcoin OTS proof subset.
+    /// Run the partial anchor check; this is not a chain-integrity verdict.
     Anchor {
         /// Path to the canonical JSONL chain.
         chain: PathBuf,
@@ -66,7 +66,14 @@ fn run(cli: Cli) -> Result<String, String> {
             ))
         }
         Command::Anchor { chain, ots_proof } => {
-            anchor::verify_anchor(&chain, &ots_proof).map_err(|error| error.to_string())?;
+            anchor::verify_anchor(&chain, &ots_proof).map_err(|error| {
+                format!(
+                    "anchor check incomplete: {error}\n\
+                     IMPORTANT: this non-zero exit does NOT mean the chain is corrupt or tampered. \
+                     The `chain` subcommand is the chain-integrity verdict. Full anchor verification \
+                     requires an independently trusted Bitcoin Core node and a mature Rust OTS proof-verification crate."
+                )
+            })?;
             Ok("anchor valid".to_owned())
         }
     }
