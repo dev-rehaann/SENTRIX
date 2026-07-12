@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentrix-forensics"
+version = "0.1.0"
+description = "Tamper-evident event logging for Sentrix"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "cryptography>=42.0,<50",
+    "filelock>=3.15,<4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.0",
+    "pytest>=8.0",
+    "ruff>=0.5",
+]
+
+[tool.setuptools]
+packages = ["forensics"]
+package-dir = { forensics = "." }
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+extend-exclude = "(pytest-cache-files-|\\.pytest_cache)"
+
+[tool.ruff]
+exclude = [".pytest_cache", "pytest-cache-files-*"]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]

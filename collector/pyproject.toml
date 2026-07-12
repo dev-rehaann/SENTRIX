@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentrix-collector"
+version = "0.1.0"
+description = "Mutually authenticated CSI ingest service for Sentrix"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "PyYAML>=6.0.1,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.0",
+    "cryptography>=42.0",
+    "pytest>=8.0",
+    "ruff>=0.5",
+]
+
+[project.scripts]
+sentrix-collector = "sentrix_collector.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sentrix_collector*"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+exclude = [".venv", ".pytest_cache", "pytest-cache-files-*"]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]

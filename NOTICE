@@ -1,0 +1,13 @@
+Sentrix
+Copyright 2026 Reha and Sentrix contributors
+
+This product includes software developed as part of the Sentrix project
+(https://github.com/<your-org>/sentrix).
+
+Sentrix builds on prior open-source and academic CSI-sensing work, including
+but not limited to:
+  - ESP32-CSI-Tool (Hernandez & Bulut) — https://github.com/StevenMHernandez/ESP32-CSI-Tool
+  - esp-csi (Espressif Systems) — https://github.com/espressif/esp-csi
+
+See docs/standards-alignment.md for the full list of standards and prior art
+referenced by this project.

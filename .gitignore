@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ESP-IDF / firmware build artifacts
+firmware/**/build/
+firmware/**/sdkconfig
+firmware/**/sdkconfig.old
+firmware/**/managed_components/
+firmware/**/dependencies.lock
+
+# Rust / Go verifier-cli build artifacts
+verifier-cli/target/
+verifier-cli/bin/
+verifier-cli/*.exe
+
+# Node (if any tooling needs it)
+node_modules/
+
+# Secrets / certs — never commit real project CA material
+*.key
+*.pem
+!**/test-fixtures/*.key
+!**/test-fixtures/*.pem
+ca.crt
+ca.srl
+
+# Data
+dataset/raw/
+*.csv.gz
+*.pcap
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local AI assistant state and chat artifacts
+.agents/
+.codex/
+.chatgpt/
+.claude/

@@ -1,0 +1,13 @@
+tls:
+  ca_cert: ../certs/ca.crt
+  server_cert: ../certs/server.crt
+  server_key: ../certs/server.key
+
+allowlist_path: nodes.yaml
+
+server:
+  host: 0.0.0.0
+  port: 8443
+  handshake_timeout_seconds: 10
+  read_timeout_seconds: 10
+  max_payload_bytes: 65536
