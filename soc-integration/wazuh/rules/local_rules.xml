@@ -1,7 +1,7 @@
 <group name="sentrix,physical_intrusion,">
   <!-- Group every canonical Sentrix event without generating an alert. -->
   <rule id="100200" level="0">
-    <decoded_as>sentrix_json</decoded_as>
+    <decoded_as>sentrix</decoded_as>
     <field name="source" type="pcre2">^sentrix$</field>
     <description>Sentrix canonical SOC event</description>
     <options>no_full_log</options>

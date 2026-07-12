@@ -1,8 +1,92 @@
 # Wazuh integration
 
-These files target the current Wazuh 4.x XML decoder/rule syntax. The decoder
-uses a narrow prematch only for routing and `JSON_Decoder` for all field
-extraction.
+These files are live-tested against the official
+`wazuh/wazuh-manager:4.14.5` image. The decoder uses a narrow prematch only for
+routing and `JSON_Decoder` for all field extraction.
+
+The Compose stack is intentionally manager-only. The official single-node
+quickstart also starts an indexer and dashboard, but neither participates in
+`wazuh-logtest`. Filebeat/indexer connection warnings are therefore expected
+in container logs and do not affect the manager analysis engine or these tests.
+
+## Docker verification
+
+Run all commands from `soc-integration/`. Docker Compose v2 and Python 3.11 or
+newer are required.
+
+### 1. Start the manager
+
+```console
+docker compose -f wazuh/docker-compose.yml up -d --wait
+docker compose -f wazuh/docker-compose.yml ps
+```
+
+The second command must report `wazuh.manager` as `healthy`. Compose mounts
+`wazuh/decoders/local_decoder.xml` and `wazuh/rules/local_rules.xml` read-only
+at `/var/ossec/etc/decoders/local_decoder.xml` and
+`/var/ossec/etc/rules/local_rules.xml` in the container.
+
+### 2. Assert all six samples with `wazuh-logtest -U`
+
+`-U rule-id:level:decoder` makes `wazuh-logtest` return non-zero unless all
+three expected values match. These are the exact commands used for the saved
+evidence:
+
+```console
+python3 -m ocsf.mapper wazuh wazuh/sample_events/high_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100201:10:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/intrusion_without_badge.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100202:12:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/borderline_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/low_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/sensor_tamper.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100203:12:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/normal_benign.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+```
+
+Expected final rules:
+
+| Sample | Expected result |
+|---|---|
+| `high_confidence_intrusion.json` | `100201`, level 10, alert |
+| `intrusion_without_badge.json` | `100202`, level 12, alert |
+| `borderline_intrusion.json` | only non-alerting grouping rule `100200`, level 0 |
+| `low_confidence_intrusion.json` | only non-alerting grouping rule `100200`, level 0 |
+| `sensor_tamper.json` | `100203`, level 12, alert |
+| `normal_benign.json` | negative test: only `100200`, level 0; no alert |
+
+Every command must end with `Unit test OK`. A level-0 `100200` match means the
+event was decoded and deliberately suppressed; it is not an alert. Alerting
+output additionally contains `**Alert to be generated.`.
+
+### 3. Capture evidence
+
+On Bash, rerun the same commands as a group and save their complete combined
+stdout/stderr with `tee`:
+
+```console
+set -o pipefail
+{
+  echo '=== high_confidence_intrusion.json ==='
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/high_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100201:10:sentrix
+  echo '=== intrusion_without_badge.json ==='
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/intrusion_without_badge.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100202:12:sentrix
+  echo '=== borderline_intrusion.json ==='
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/borderline_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+  echo '=== low_confidence_intrusion.json ==='
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/low_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+  echo '=== sensor_tamper.json ==='
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/sensor_tamper.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100203:12:sentrix
+  echo '=== normal_benign.json (negative test) ==='
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/normal_benign.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+} 2>&1 | tee wazuh/sample_events/logtest_output.txt
+```
+
+The checked-in
+[`sample_events/logtest_output.txt`](sample_events/logtest_output.txt) records
+the actual decoder, final rule, level, alert status, image digest, and mounted
+file hashes from the live verification run. Stop the manager when finished:
+
+```console
+docker compose -f wazuh/docker-compose.yml down
+```
 
 ## Install on a Wazuh manager
 
@@ -20,37 +104,6 @@ sudo systemctl restart wazuh-manager
 The commands assume the shell is in `soc-integration/`. On a manager with
 existing custom rules, manually merge the `<decoder>` and `<group>` blocks
 instead of using `install`.
-
-## Test every sample
-
-Each command maps the canonical sample through the same Python Wazuh mapper
-used by producers and feeds one compact JSON line to Wazuh. For positive
-cases, `-U rule-id:level:decoder` makes `wazuh-logtest` exit successfully only
-when the exact expected rule, level, and decoder match:
-
-```console
-python3 -m ocsf.mapper wazuh wazuh/sample_events/high_confidence_intrusion.json | sudo /var/ossec/bin/wazuh-logtest -q -U 100201:10:sentrix_json
-python3 -m ocsf.mapper wazuh wazuh/sample_events/intrusion_without_badge.json | sudo /var/ossec/bin/wazuh-logtest -q -U 100202:12:sentrix_json
-python3 -m ocsf.mapper wazuh wazuh/sample_events/borderline_intrusion.json | sudo /var/ossec/bin/wazuh-logtest -v
-python3 -m ocsf.mapper wazuh wazuh/sample_events/low_confidence_intrusion.json | sudo /var/ossec/bin/wazuh-logtest -v
-python3 -m ocsf.mapper wazuh wazuh/sample_events/sensor_tamper.json | sudo /var/ossec/bin/wazuh-logtest -q -U 100203:12:sentrix_json
-python3 -m ocsf.mapper wazuh wazuh/sample_events/normal_benign.json | sudo /var/ossec/bin/wazuh-logtest -v
-```
-
-Expected final rules:
-
-| Sample | Expected result |
-|---|---|
-| `high_confidence_intrusion.json` | `100201`, level 10 |
-| `intrusion_without_badge.json` | `100202`, level 12 |
-| `borderline_intrusion.json` | no alerting Sentrix rule (only level-0 grouping rule `100200`) |
-| `low_confidence_intrusion.json` | no alerting Sentrix rule (only `100200`) |
-| `sensor_tamper.json` | `100203`, level 12 |
-| `normal_benign.json` | no alerting Sentrix rule (negative test; only `100200`) |
-
-`wazuh-logtest` prints decoding in phase 2 and the selected rule in phase 3.
-Confirm phase 2 reports decoder `sentrix_json` and fields such as `source`,
-`class`, `confidence_level`, and `pacs_event_status`.
 
 ## Authentication correlation assumption
 

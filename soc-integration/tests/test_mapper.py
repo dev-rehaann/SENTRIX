@@ -91,12 +91,11 @@ def test_wazuh_decoder_uses_json_plugin_and_expected_dynamic_fields() -> None:
         encoding="utf-8"
     )
     decoder_root = ET.fromstring(f"<root>{decoder_text}</root>")
-    child = decoder_root.find("./decoder[@name='sentrix_json']")
-    assert child is not None
-    assert child.findtext("parent") == "sentrix"
-    assert child.findtext("plugin_decoder") == "JSON_Decoder"
-    assert child.findtext("use_own_name") == "true"
-    assert child.find("regex") is None
+    decoder = decoder_root.find("./decoder[@name='sentrix']")
+    assert decoder is not None
+    assert decoder.findtext("plugin_decoder") == "JSON_Decoder"
+    assert decoder.find("prematch") is not None
+    assert decoder.find("regex") is None
 
     rules = ET.parse(ROOT / "wazuh" / "rules" / "local_rules.xml").getroot()
     assert rules.attrib["name"] == "sentrix,physical_intrusion,"
@@ -119,3 +118,14 @@ def test_rule_ids_and_correlation_references_are_stable() -> None:
     }
     assert by_id["100211"].findtext("if_sid") == "100201"
     assert by_id["100211"].findtext("if_matched_group") == "sentrix_auth_anomaly"
+
+
+def test_wazuh_compose_pins_tested_manager_and_mounts_custom_xml() -> None:
+    compose = (ROOT / "wazuh" / "docker-compose.yml").read_text(encoding="utf-8")
+
+    assert "image: wazuh/wazuh-manager:4.14.5" in compose
+    assert (
+        "./decoders/local_decoder.xml:/var/ossec/etc/decoders/local_decoder.xml:ro"
+        in compose
+    )
+    assert "./rules/local_rules.xml:/var/ossec/etc/rules/local_rules.xml:ro" in compose

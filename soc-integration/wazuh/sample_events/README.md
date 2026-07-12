@@ -1,28 +1,25 @@
 # Sample-event validation
 
-Run these commands from `soc-integration/` after installing the decoder and
-rules on a Wazuh manager. Each input file is a canonical alert; the mapper
-produces the flat JSON line consumed by `sentrix_json`.
-
-Positive cases use Wazuh's `-U rule-id:level:decoder` assertion, so a mismatch
-causes a non-zero exit:
+Run from `soc-integration/` after starting the manager with the steps in
+[`../README.md`](../README.md). Each command maps one canonical alert and uses
+`-U` to assert the exact rule ID, level, and decoder against the running Wazuh
+4.14.5 manager:
 
 ```console
-python3 -m ocsf.mapper wazuh wazuh/sample_events/high_confidence_intrusion.json | sudo /var/ossec/bin/wazuh-logtest -q -U 100201:10:sentrix_json
-python3 -m ocsf.mapper wazuh wazuh/sample_events/intrusion_without_badge.json | sudo /var/ossec/bin/wazuh-logtest -q -U 100202:12:sentrix_json
-python3 -m ocsf.mapper wazuh wazuh/sample_events/sensor_tamper.json | sudo /var/ossec/bin/wazuh-logtest -q -U 100203:12:sentrix_json
+python3 -m ocsf.mapper wazuh wazuh/sample_events/high_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100201:10:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/intrusion_without_badge.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100202:12:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/borderline_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/low_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/sensor_tamper.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100203:12:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/normal_benign.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
 ```
 
-The remaining samples are negative cases. Use verbose output and confirm phase
-2 selects `sentrix_json`, while phase 3 reports no alerting Sentrix rule (the
-level-0 grouping rule `100200` may be shown):
+All commands must end with `Unit test OK`. Rule `100200` is level 0 and does
+not generate an alert; it groups and suppresses borderline, low-confidence,
+and benign events. The benign sample is therefore a successful negative test
+when it selects only `100200` and has no `**Alert to be generated.` line.
 
-```console
-python3 -m ocsf.mapper wazuh wazuh/sample_events/borderline_intrusion.json | sudo /var/ossec/bin/wazuh-logtest -v
-python3 -m ocsf.mapper wazuh wazuh/sample_events/low_confidence_intrusion.json | sudo /var/ossec/bin/wazuh-logtest -v
-python3 -m ocsf.mapper wazuh wazuh/sample_events/normal_benign.json | sudo /var/ossec/bin/wazuh-logtest -v
-```
-
+[`logtest_output.txt`](logtest_output.txt) contains the actual output excerpts,
+image digest, and mounted-file hashes captured from the live manager run.
 `intrusion_without_badge.json` assumes an upstream PACS enricher has already
-closed its correlation window and set `pacs_event_status` to `missing`. The
-rules do not infer the absence of a badge event from these samples.
+set `pacs_event_status` to `missing`; Wazuh does not infer absence itself.
