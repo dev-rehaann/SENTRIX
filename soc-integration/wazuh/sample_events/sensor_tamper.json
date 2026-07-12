@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "source": "sentrix",
+  "event_id": "sentrix-20260713T201905Z-node-07-tamper-01",
+  "ts_utc": "2026-07-13T20:19:05Z",
+  "node_id": "node-07",
+  "site_id": "hq-karachi",
+  "zone_id": "server-room-west",
+  "class": "sensor_tamper",
+  "confidence": 1.0,
+  "confidence_level": "high",
+  "model_id": "sensor-tamper-switch-v1",
+  "top_shap": [],
+  "pacs_event_status": "not_applicable",
+  "pacs_reader_id": null,
+  "pacs_event_id": null,
+  "sequence_number": 4423,
+  "seq": 1205,
+  "record_hash": "23456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef01"
+}

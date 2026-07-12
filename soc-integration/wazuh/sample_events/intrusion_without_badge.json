@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "source": "sentrix",
+  "event_id": "sentrix-20260713T201613Z-node-08-0043",
+  "ts_utc": "2026-07-13T20:16:13.225Z",
+  "node_id": "node-08",
+  "site_id": "hq-karachi",
+  "zone_id": "records-vault",
+  "class": "intrusion",
+  "confidence": 0.99,
+  "confidence_level": "high",
+  "model_id": "rf-csi-v1.4.2",
+  "top_shap": [
+    {"feature": "amplitude_entropy", "value": 0.52, "rank": 1}
+  ],
+  "pacs_event_status": "missing",
+  "pacs_reader_id": "reader-vault-01",
+  "pacs_event_id": null,
+  "csi_window_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "sequence_number": 918,
+  "seq": 1202,
+  "record_hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+}

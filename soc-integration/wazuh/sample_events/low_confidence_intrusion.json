@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "source": "sentrix",
+  "event_id": "sentrix-20260713T201801Z-node-11-0045",
+  "ts_utc": "2026-07-13T20:18:01Z",
+  "node_id": "node-11",
+  "site_id": "warehouse-lahore",
+  "zone_id": "loading-bay-3",
+  "class": "intrusion",
+  "confidence": 0.42,
+  "confidence_level": "low",
+  "model_id": "rf-csi-v1.4.2",
+  "top_shap": [
+    {"feature": "phase_delta_stddev", "value": 0.08, "rank": 1}
+  ],
+  "pacs_event_status": "unknown",
+  "pacs_reader_id": null,
+  "pacs_event_id": null,
+  "csi_window_sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "sequence_number": 77,
+  "seq": 1204,
+  "record_hash": "123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0"
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "source": "sentrix",
+  "event_id": "sentrix-20260713T201501Z-node-07-0042",
+  "ts_utc": "2026-07-13T20:15:01Z",
+  "node_id": "node-07",
+  "site_id": "hq-karachi",
+  "zone_id": "server-room-west",
+  "class": "intrusion",
+  "confidence": 0.97,
+  "confidence_level": "high",
+  "model_id": "rf-csi-v1.4.2",
+  "top_shap": [
+    {"feature": "subcarrier_variance_12_18", "value": 0.41, "rank": 1},
+    {"feature": "phase_delta_mean", "value": 0.24, "rank": 2}
+  ],
+  "pacs_event_status": "matched",
+  "pacs_reader_id": "reader-west-02",
+  "pacs_event_id": "pacs-884103",
+  "csi_window_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "sequence_number": 4421,
+  "seq": 1201,
+  "record_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}
