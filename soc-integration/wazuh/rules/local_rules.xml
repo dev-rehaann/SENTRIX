@@ -7,7 +7,7 @@
     <options>no_full_log</options>
   </rule>
 
-  <!-- confidence_level=high is derived from confidence >= 0.90 by mapper.py. -->
+  <!-- confidence_level is derived and validated by mapper.py per SCHEMA.md. -->
   <rule id="100201" level="10">
     <if_sid>100200</if_sid>
     <field name="class" type="pcre2">^intrusion$</field>
@@ -40,7 +40,7 @@
     Correlation helper for current Wazuh built-in OpenSSH brute-force rules:
       5712 - nonexistent-user brute force
       5763 - repeated authentication-failure brute force
-    It is level 1 (not 0) so if_matched_group history can retain it; no_log
+    It is level 1 (not 0) so if_matched_sid history can retain it; no_log
     prevents a duplicate alert. These IDs are version-dependent assumptions.
   -->
   <rule id="100210" level="1">
@@ -57,7 +57,7 @@
   -->
   <rule id="100211" level="14" timeframe="120">
     <if_sid>100201</if_sid>
-    <if_matched_group>sentrix_auth_anomaly</if_matched_group>
+    <if_matched_sid>100210</if_matched_sid>
     <description>Sentrix: physical intrusion within 120s of an SSH authentication anomaly at $(site_id)/$(zone_id)</description>
     <group>physical_security,authentication_failures,correlation,</group>
   </rule>

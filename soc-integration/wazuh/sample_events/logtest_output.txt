@@ -3,8 +3,8 @@ Sentrix Wazuh live-manager verification evidence
 Captured: 2026-07-13T04:18:55.2420476+05:00
 Manager: Wazuh v4.14.5, Docker container af79c10558bd (healthy)
 Image: wazuh/wazuh-manager@sha256:824ff13d446682cd3bd5960479ce0d1d6a9fed8fdbc0ce31a4f0f3b9a97a7734
-Decoder SHA-256: ee64695ed78f51941374df4cdf7fecf46011d080b496913148365bea8fc2b985
-Rules SHA-256: 98d89563d1d02815c152f6220e4fc207f1cc7883b921086057c356ed4c71bfc9
+Decoder SHA-256: b8c96d9c53b999a7c14a4612efd464ab6b377170baac465637a7cb2ef1a988fe
+Rules SHA-256: 462a82a36ca5c4720f3476d61721d3fd3c1bdd22081ee713631d0005c95099b5
 
 The excerpts below are the actual Phase 2/Phase 3 and unit-test results from
 /var/ossec/bin/wazuh-logtest inside the official manager container. Level 0
@@ -132,3 +132,81 @@ Unit test OK
 Negative-test verdict: decoded by sentrix and consumed only by level-0 rule
 100200. No alerting Sentrix rule matched and wazuh-logtest did not print
 "**Alert to be generated."
+
+=== Level-14 authentication correlation audit ===
+Captured after rule/decoder reload on the same Wazuh v4.14.5 manager image.
+One persistent wazuh-logtest pseudo-terminal session received eight same-source
+OpenSSH invalid-user events followed by one BOM-free Sentrix JSON event.
+
+Built-in path:
+  5710 - one invalid-user SSH attempt
+  5712 - eight 5710 matches from the same source IP within 120 seconds
+  100210 - retained level-1 no_log helper for 5712/5763
+  100211 - current 100201 plus prior 100210 within 120 seconds
+
+events_sent=9 phase2_count=9 phase3_count=9
+phase3[1] id=5710 level=5 description=sshd: Attempt to login using a non-existent user
+phase3[2] id=5710 level=5 description=sshd: Attempt to login using a non-existent user
+phase3[3] id=5710 level=5 description=sshd: Attempt to login using a non-existent user
+phase3[4] id=5710 level=5 description=sshd: Attempt to login using a non-existent user
+phase3[5] id=5710 level=5 description=sshd: Attempt to login using a non-existent user
+phase3[6] id=5710 level=5 description=sshd: Attempt to login using a non-existent user
+phase3[7] id=5710 level=5 description=sshd: Attempt to login using a non-existent user
+phase3[8] id=100210 level=1 description=Sentrix correlation helper: recent SSH authentication anomaly
+phase3[9] id=100211 level=14 description=Sentrix: physical intrusion within 120s of an SSH authentication anomaly at hq-karachi/server-room-west
+
+--- correlated event Phase 2 ---
+**Phase 2: Completed decoding.
+	name: 'sentrix'
+	parent: 'json'
+	class: 'intrusion'
+	confidence: '0.970000'
+	confidence_level: 'high'
+	event_id: 'sentrix-if-matched-sid-audit-20260713T052000Z'
+	node_id: 'node-07'
+	site_id: 'hq-karachi'
+	zone_id: 'server-room-west'
+
+--- correlated event Phase 3 ---
+**Phase 3: Completed filtering (rules).
+	id: '100211'
+	level: '14'
+	description: 'Sentrix: physical intrusion within 120s of an SSH authentication anomaly at hq-karachi/server-room-west'
+	groups: '['sentrix', 'physical_intrusion', 'physical_security', 'authentication_failures', 'correlation']'
+	firedtimes: '1'
+	frequency: '2'
+	mail: 'True'
+**Alert to be generated.
+
+Correlation verdict: PASS. The eighth SSH event selected helper 100210 and the
+immediately following Sentrix event selected 100211 at level 14.
+
+=== Confidence single-source audit ===
+Rule 100201 XML condition:
+  <field name="confidence_level" type="pcre2">^high$</field>
+
+No <field name="confidence"> condition or numeric threshold exists in
+local_rules.xml. mapper.py rejected an intentionally inconsistent canonical
+alert before Wazuh JSON generation with this actual result:
+
+AlertValidationError: confidence_level must be 'borderline' for confidence 0.8999
+
+Confidence-boundary verdict: PASS. Threshold derivation/validation remains in
+mapper.py; Wazuh consumes only the validated confidence_level band.
+
+=== Post-audit standalone regression (BOM-free JSON) ===
+All six events were remapped and piped as exact UTF-8 JSON bytes into the
+reloaded Wazuh v4.14.5 manager. Every command used -U and returned Unit test OK.
+
+high_confidence_intrusion.json
+  decoder=sentrix parent=json rule=100201 level=10 alert=yes
+intrusion_without_badge.json
+  decoder=sentrix parent=json rule=100202 level=12 alert=yes
+borderline_intrusion.json
+  decoder=sentrix parent=json rule=100200 level=0 alert=no
+low_confidence_intrusion.json
+  decoder=sentrix parent=json rule=100200 level=0 alert=no
+sensor_tamper.json
+  decoder=sentrix parent=json rule=100203 level=12 alert=yes
+normal_benign.json
+  decoder=sentrix parent=json rule=100200 level=0 alert=no

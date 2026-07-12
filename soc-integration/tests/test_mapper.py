@@ -93,6 +93,8 @@ def test_wazuh_decoder_uses_json_plugin_and_expected_dynamic_fields() -> None:
     decoder_root = ET.fromstring(f"<root>{decoder_text}</root>")
     decoder = decoder_root.find("./decoder[@name='sentrix']")
     assert decoder is not None
+    assert decoder.findtext("parent") == "json"
+    assert decoder.findtext("use_own_name") == "true"
     assert decoder.findtext("plugin_decoder") == "JSON_Decoder"
     assert decoder.find("prematch") is not None
     assert decoder.find("regex") is None
@@ -117,7 +119,19 @@ def test_rule_ids_and_correlation_references_are_stable() -> None:
         "timeframe": "120",
     }
     assert by_id["100211"].findtext("if_sid") == "100201"
-    assert by_id["100211"].findtext("if_matched_group") == "sentrix_auth_anomaly"
+    assert by_id["100211"].findtext("if_matched_sid") == "100210"
+
+
+def test_mapper_rejects_subthreshold_confidence_labeled_high() -> None:
+    source = load_sample(SAMPLES / "high_confidence_intrusion.json")
+    source["confidence"] = 0.8999
+    source["confidence_level"] = "high"
+
+    with pytest.raises(
+        AlertValidationError,
+        match=r"confidence_level must be 'borderline' for confidence 0\.8999",
+    ):
+        to_wazuh(source)
 
 
 def test_wazuh_compose_pins_tested_manager_and_mounts_custom_xml() -> None:

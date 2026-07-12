@@ -2,7 +2,9 @@
 
 These files are live-tested against the official
 `wazuh/wazuh-manager:4.14.5` image. The decoder uses a narrow prematch only for
-routing and `JSON_Decoder` for all field extraction.
+routing and `JSON_Decoder` for all field extraction. It is a child of Wazuh's
+built-in `json` decoder and sets `use_own_name=true`; this ensures clean JSON is
+identified as `sentrix` instead of being claimed only by the generic decoder.
 
 The Compose stack is intentionally manager-only. The official single-node
 quickstart also starts an indexer and dashboard, but neither participates in
@@ -105,18 +107,17 @@ The commands assume the shell is in `soc-integration/`. On a manager with
 existing custom rules, manually merge the `<decoder>` and `<group>` blocks
 instead of using `install`.
 
-## Authentication correlation assumption
+## Authentication correlation
 
 Rule `100210` wraps two current built-in OpenSSH brute-force detections:
 
 - `5712`: brute force using nonexistent users.
 - `5763`: brute force following repeated SSH authentication failures.
 
-Rule `100211` fires at level 14 when a high-confidence Sentrix intrusion
-arrives within 120 seconds after either built-in rule. This is intentionally
-illustrative until a real authentication source is enriched with `site_id` or
-`zone_id`; as shipped, the time correlation is manager-global and does not
-claim both events concern the same site.
+Rule `100210` is a level-1, `no_log` helper that retains either built-in result.
+Rule `100211` then combines current-event `<if_sid>100201</if_sid>` with
+prior-event `<if_matched_sid>100210</if_matched_sid>` in a 120-second window.
+The direction is deliberately auth anomaly first, Sentrix intrusion second.
 
 To exercise the correlation in one persistent `wazuh-logtest` session, start:
 
@@ -124,10 +125,27 @@ To exercise the correlation in one persistent `wazuh-logtest` session, start:
 sudo /var/ossec/bin/wazuh-logtest -v
 ```
 
-Then submit enough same-source OpenSSH failure lines to trigger built-in rule
-`5712` or `5763`, followed within 120 seconds by the mapped
-`high_confidence_intrusion.json` line. Wazuh correlation state is session-local
-in `wazuh-logtest`; separate one-shot commands do not share it.
+For the live verification, eight same-source invalid-user SSH events first
+triggered base rule `5710`; the eighth produced helper `100210` through built-in
+rule `5712`. The following Sentrix event fired `100211` at level 14. The actual
+phase output is saved in
+[`sample_events/logtest_output.txt`](sample_events/logtest_output.txt).
+
+Wazuh correlation state is session-local in `wazuh-logtest`; separate one-shot
+commands do not share it. Authentication events also do not currently carry
+canonical `site_id` or `zone_id`, so the shipped correlation remains
+manager-global even when the SSH hostname identifies the same sensor. A real
+authentication source must add those fields before site-scoped correlation can
+be claimed.
+
+## Confidence validation boundary
+
+`ocsf/mapper.py` is the only implementation of confidence thresholds. Rule
+`100201` trusts the already validated `confidence_level=high` field and does
+not compare raw `confidence` numerically. An input such as
+`confidence=0.8999, confidence_level=high` is rejected by the mapper before a
+Wazuh payload exists; duplicating that validation in XML would create a second
+threshold that could drift from `SCHEMA.md`.
 
 ## PACS assumption
 
