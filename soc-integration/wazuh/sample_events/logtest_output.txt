@@ -1,4 +1,4 @@
-Sentrix Wazuh live-manager verification evidence
+Vestrix Wazuh live-manager verification evidence
 ================================================
 Captured: 2026-07-13T04:18:55.2420476+05:00
 Manager: Wazuh v4.14.5, Docker container af79c10558bd (healthy)
@@ -12,10 +12,10 @@ rule 100200 is a non-alerting grouping/suppression rule; only output containing
 "**Alert to be generated." represents a generated alert.
 
 === high_confidence_intrusion.json ===
-Command expectation: -U 100201:10:sentrix
+Command expectation: -U 100201:10:vestrix
 
 **Phase 2: Completed decoding.
-	name: 'sentrix'
+	name: 'vestrix'
 	class: 'intrusion'
 	confidence: '0.970000'
 	confidence_level: 'high'
@@ -23,8 +23,8 @@ Command expectation: -U 100201:10:sentrix
 **Phase 3: Completed filtering (rules).
 	id: '100201'
 	level: '10'
-	description: 'Sentrix: high-confidence physical intrusion at hq-karachi/server-room-west, sensor node-07'
-	groups: '['sentrix', 'physical_intrusion', 'physical_security', 'intrusion_detection']'
+	description: 'Vestrix: high-confidence physical intrusion at hq-karachi/server-room-west, sensor node-07'
+	groups: '['vestrix', 'physical_intrusion', 'physical_security', 'intrusion_detection']'
 	firedtimes: '1'
 	mail: 'False'
 **Alert to be generated.
@@ -32,10 +32,10 @@ Command expectation: -U 100201:10:sentrix
 Unit test OK
 
 === intrusion_without_badge.json ===
-Command expectation: -U 100202:12:sentrix
+Command expectation: -U 100202:12:vestrix
 
 **Phase 2: Completed decoding.
-	name: 'sentrix'
+	name: 'vestrix'
 	class: 'intrusion'
 	confidence: '0.990000'
 	confidence_level: 'high'
@@ -44,8 +44,8 @@ Command expectation: -U 100202:12:sentrix
 **Phase 3: Completed filtering (rules).
 	id: '100202'
 	level: '12'
-	description: 'Sentrix: physical intrusion with no corresponding badge/PACS event at hq-karachi/records-vault'
-	groups: '['sentrix', 'physical_intrusion', 'physical_security', 'access_control']'
+	description: 'Vestrix: physical intrusion with no corresponding badge/PACS event at hq-karachi/records-vault'
+	groups: '['vestrix', 'physical_intrusion', 'physical_security', 'access_control']'
 	firedtimes: '1'
 	mail: 'True'
 **Alert to be generated.
@@ -53,10 +53,10 @@ Command expectation: -U 100202:12:sentrix
 Unit test OK
 
 === borderline_intrusion.json ===
-Command expectation: -U 100200:0:sentrix
+Command expectation: -U 100200:0:vestrix
 
 **Phase 2: Completed decoding.
-	name: 'sentrix'
+	name: 'vestrix'
 	class: 'intrusion'
 	confidence: '0.720000'
 	confidence_level: 'borderline'
@@ -64,18 +64,18 @@ Command expectation: -U 100200:0:sentrix
 **Phase 3: Completed filtering (rules).
 	id: '100200'
 	level: '0'
-	description: 'Sentrix canonical SOC event'
-	groups: '['sentrix', 'physical_intrusion']'
+	description: 'Vestrix canonical SOC event'
+	groups: '['vestrix', 'physical_intrusion']'
 	firedtimes: '1'
 	mail: 'False'
 
 Unit test OK
 
 === low_confidence_intrusion.json ===
-Command expectation: -U 100200:0:sentrix
+Command expectation: -U 100200:0:vestrix
 
 **Phase 2: Completed decoding.
-	name: 'sentrix'
+	name: 'vestrix'
 	class: 'intrusion'
 	confidence: '0.420000'
 	confidence_level: 'low'
@@ -83,18 +83,18 @@ Command expectation: -U 100200:0:sentrix
 **Phase 3: Completed filtering (rules).
 	id: '100200'
 	level: '0'
-	description: 'Sentrix canonical SOC event'
-	groups: '['sentrix', 'physical_intrusion']'
+	description: 'Vestrix canonical SOC event'
+	groups: '['vestrix', 'physical_intrusion']'
 	firedtimes: '1'
 	mail: 'False'
 
 Unit test OK
 
 === sensor_tamper.json ===
-Command expectation: -U 100203:12:sentrix
+Command expectation: -U 100203:12:vestrix
 
 **Phase 2: Completed decoding.
-	name: 'sentrix'
+	name: 'vestrix'
 	class: 'sensor_tamper'
 	confidence: '1'
 	confidence_level: 'high'
@@ -102,8 +102,8 @@ Command expectation: -U 100203:12:sentrix
 **Phase 3: Completed filtering (rules).
 	id: '100203'
 	level: '12'
-	description: 'Sentrix: sensor tamper detected on node-07 at hq-karachi/server-room-west'
-	groups: '['sentrix', 'physical_intrusion', 'physical_security', 'sensor_tamper', 'defense_evasion']'
+	description: 'Vestrix: sensor tamper detected on node-07 at hq-karachi/server-room-west'
+	groups: '['vestrix', 'physical_intrusion', 'physical_security', 'sensor_tamper', 'defense_evasion']'
 	firedtimes: '1'
 	mail: 'True'
 **Alert to be generated.
@@ -111,10 +111,10 @@ Command expectation: -U 100203:12:sentrix
 Unit test OK
 
 === normal_benign.json (negative test) ===
-Command expectation: -U 100200:0:sentrix
+Command expectation: -U 100200:0:vestrix
 
 **Phase 2: Completed decoding.
-	name: 'sentrix'
+	name: 'vestrix'
 	class: 'normal'
 	confidence: '0.980000'
 	confidence_level: 'high'
@@ -122,21 +122,21 @@ Command expectation: -U 100200:0:sentrix
 **Phase 3: Completed filtering (rules).
 	id: '100200'
 	level: '0'
-	description: 'Sentrix canonical SOC event'
-	groups: '['sentrix', 'physical_intrusion']'
+	description: 'Vestrix canonical SOC event'
+	groups: '['vestrix', 'physical_intrusion']'
 	firedtimes: '1'
 	mail: 'False'
 
 Unit test OK
 
-Negative-test verdict: decoded by sentrix and consumed only by level-0 rule
-100200. No alerting Sentrix rule matched and wazuh-logtest did not print
+Negative-test verdict: decoded by vestrix and consumed only by level-0 rule
+100200. No alerting Vestrix rule matched and wazuh-logtest did not print
 "**Alert to be generated."
 
 === Level-14 authentication correlation audit ===
 Captured after rule/decoder reload on the same Wazuh v4.14.5 manager image.
 One persistent wazuh-logtest pseudo-terminal session received eight same-source
-OpenSSH invalid-user events followed by one BOM-free Sentrix JSON event.
+OpenSSH invalid-user events followed by one BOM-free Vestrix JSON event.
 
 Built-in path:
   5710 - one invalid-user SSH attempt
@@ -152,17 +152,17 @@ phase3[4] id=5710 level=5 description=sshd: Attempt to login using a non-existen
 phase3[5] id=5710 level=5 description=sshd: Attempt to login using a non-existent user
 phase3[6] id=5710 level=5 description=sshd: Attempt to login using a non-existent user
 phase3[7] id=5710 level=5 description=sshd: Attempt to login using a non-existent user
-phase3[8] id=100210 level=1 description=Sentrix correlation helper: recent SSH authentication anomaly
-phase3[9] id=100211 level=14 description=Sentrix: physical intrusion within 120s of an SSH authentication anomaly at hq-karachi/server-room-west
+phase3[8] id=100210 level=1 description=Vestrix correlation helper: recent SSH authentication anomaly
+phase3[9] id=100211 level=14 description=Vestrix: physical intrusion within 120s of an SSH authentication anomaly at hq-karachi/server-room-west
 
 --- correlated event Phase 2 ---
 **Phase 2: Completed decoding.
-	name: 'sentrix'
+	name: 'vestrix'
 	parent: 'json'
 	class: 'intrusion'
 	confidence: '0.970000'
 	confidence_level: 'high'
-	event_id: 'sentrix-if-matched-sid-audit-20260713T052000Z'
+	event_id: 'vestrix-if-matched-sid-audit-20260713T052000Z'
 	node_id: 'node-07'
 	site_id: 'hq-karachi'
 	zone_id: 'server-room-west'
@@ -171,15 +171,15 @@ phase3[9] id=100211 level=14 description=Sentrix: physical intrusion within 120s
 **Phase 3: Completed filtering (rules).
 	id: '100211'
 	level: '14'
-	description: 'Sentrix: physical intrusion within 120s of an SSH authentication anomaly at hq-karachi/server-room-west'
-	groups: '['sentrix', 'physical_intrusion', 'physical_security', 'authentication_failures', 'correlation']'
+	description: 'Vestrix: physical intrusion within 120s of an SSH authentication anomaly at hq-karachi/server-room-west'
+	groups: '['vestrix', 'physical_intrusion', 'physical_security', 'authentication_failures', 'correlation']'
 	firedtimes: '1'
 	frequency: '2'
 	mail: 'True'
 **Alert to be generated.
 
 Correlation verdict: PASS. The eighth SSH event selected helper 100210 and the
-immediately following Sentrix event selected 100211 at level 14.
+immediately following Vestrix event selected 100211 at level 14.
 
 === Confidence single-source audit ===
 Rule 100201 XML condition:
@@ -199,14 +199,14 @@ All six events were remapped and piped as exact UTF-8 JSON bytes into the
 reloaded Wazuh v4.14.5 manager. Every command used -U and returned Unit test OK.
 
 high_confidence_intrusion.json
-  decoder=sentrix parent=json rule=100201 level=10 alert=yes
+  decoder=vestrix parent=json rule=100201 level=10 alert=yes
 intrusion_without_badge.json
-  decoder=sentrix parent=json rule=100202 level=12 alert=yes
+  decoder=vestrix parent=json rule=100202 level=12 alert=yes
 borderline_intrusion.json
-  decoder=sentrix parent=json rule=100200 level=0 alert=no
+  decoder=vestrix parent=json rule=100200 level=0 alert=no
 low_confidence_intrusion.json
-  decoder=sentrix parent=json rule=100200 level=0 alert=no
+  decoder=vestrix parent=json rule=100200 level=0 alert=no
 sensor_tamper.json
-  decoder=sentrix parent=json rule=100203 level=12 alert=yes
+  decoder=vestrix parent=json rule=100203 level=12 alert=yes
 normal_benign.json
-  decoder=sentrix parent=json rule=100200 level=0 alert=no
+  decoder=vestrix parent=json rule=100200 level=0 alert=no

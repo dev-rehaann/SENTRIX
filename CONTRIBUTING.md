@@ -1,13 +1,13 @@
-# Contributing to Sentrix
+# Contributing to Vestrix
 
-Thanks for considering a contribution. Sentrix is a single-maintainer, fully open project right now — no restricted tiers, no closed modules — and the governance model is intentionally simple until there's a recurring set of outside contributors.
+Thanks for considering a contribution. Vestrix is a single-maintainer, fully open project right now — no restricted tiers, no closed modules — and the governance model is intentionally simple until there's a recurring set of outside contributors.
 
 ## Ground rules
 
 1. **Honesty over polish.** If you're contributing a benchmark, a detection result, or an accuracy claim, it must be reproducible from a documented dataset and script. Hand-reported numbers without a reproduction path will be asked to be redone before merge.
 2. **Security-first defaults.** Changes to the sensor↔collector transport, the hash-chain logger, or the verifier CLI get extra scrutiny — these are the parts of the project the forensic-grade claim depends on.
 3. **Keep the verifier CLI independent.** Do not add a dependency from `verifier-cli/` on any other package in this repo. It must remain auditable as a standalone, minimal codebase.
-4. **Scope discipline.** Sentrix is intentionally narrow (see `docs/NON-GOALS.md`). Feature requests that broaden scope into general-purpose WiFi sensing (gesture recognition, vitals, etc.) will likely be declined unless they directly serve intrusion detection.
+4. **Scope discipline.** Vestrix is intentionally narrow (see `docs/NON-GOALS.md`). Feature requests that broaden scope into general-purpose WiFi sensing (gesture recognition, vitals, etc.) will likely be declined unless they directly serve intrusion detection.
 
 ## Environment setup
 

@@ -10,7 +10,7 @@ def log_event(event: CSIEvent) -> None:
 
     Integration contract for ``forensics/`` (must retain this exact signature):
 
-        def log_event(event: sentrix_collector.models.CSIEvent) -> None
+        def log_event(event: vestrix_collector.models.CSIEvent) -> None
 
     The eventual implementation must raise an exception when durable handoff fails.
     It owns hash chaining and external timestamp anchoring. The collector must never

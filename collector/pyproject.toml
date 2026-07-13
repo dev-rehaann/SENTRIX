@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sentrix-collector"
+name = "vestrix-collector"
 version = "0.1.0"
-description = "Mutually authenticated CSI ingest service for Sentrix"
+description = "Mutually authenticated CSI ingest service for Vestrix"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Apache-2.0" }
@@ -22,11 +22,11 @@ dev = [
 ]
 
 [project.scripts]
-sentrix-collector = "sentrix_collector.__main__:main"
+vestrix-collector = "vestrix_collector.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["sentrix_collector*"]
+include = ["vestrix_collector*"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"

@@ -4,7 +4,7 @@ These files are live-tested against the official
 `wazuh/wazuh-manager:4.14.5` image. The decoder uses a narrow prematch only for
 routing and `JSON_Decoder` for all field extraction. It is a child of Wazuh's
 built-in `json` decoder and sets `use_own_name=true`; this ensures clean JSON is
-identified as `sentrix` instead of being claimed only by the generic decoder.
+identified as `vestrix` instead of being claimed only by the generic decoder.
 
 The Compose stack is intentionally manager-only. The official single-node
 quickstart also starts an indexer and dashboard, but neither participates in
@@ -35,12 +35,12 @@ three expected values match. These are the exact commands used for the saved
 evidence:
 
 ```console
-python3 -m ocsf.mapper wazuh wazuh/sample_events/high_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100201:10:sentrix
-python3 -m ocsf.mapper wazuh wazuh/sample_events/intrusion_without_badge.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100202:12:sentrix
-python3 -m ocsf.mapper wazuh wazuh/sample_events/borderline_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
-python3 -m ocsf.mapper wazuh wazuh/sample_events/low_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
-python3 -m ocsf.mapper wazuh wazuh/sample_events/sensor_tamper.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100203:12:sentrix
-python3 -m ocsf.mapper wazuh wazuh/sample_events/normal_benign.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/high_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100201:10:vestrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/intrusion_without_badge.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100202:12:vestrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/borderline_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:vestrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/low_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:vestrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/sensor_tamper.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100203:12:vestrix
+python3 -m ocsf.mapper wazuh wazuh/sample_events/normal_benign.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:vestrix
 ```
 
 Expected final rules:
@@ -67,17 +67,17 @@ stdout/stderr with `tee`:
 set -o pipefail
 {
   echo '=== high_confidence_intrusion.json ==='
-  python3 -m ocsf.mapper wazuh wazuh/sample_events/high_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100201:10:sentrix
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/high_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100201:10:vestrix
   echo '=== intrusion_without_badge.json ==='
-  python3 -m ocsf.mapper wazuh wazuh/sample_events/intrusion_without_badge.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100202:12:sentrix
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/intrusion_without_badge.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100202:12:vestrix
   echo '=== borderline_intrusion.json ==='
-  python3 -m ocsf.mapper wazuh wazuh/sample_events/borderline_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/borderline_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:vestrix
   echo '=== low_confidence_intrusion.json ==='
-  python3 -m ocsf.mapper wazuh wazuh/sample_events/low_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/low_confidence_intrusion.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:vestrix
   echo '=== sensor_tamper.json ==='
-  python3 -m ocsf.mapper wazuh wazuh/sample_events/sensor_tamper.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100203:12:sentrix
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/sensor_tamper.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100203:12:vestrix
   echo '=== normal_benign.json (negative test) ==='
-  python3 -m ocsf.mapper wazuh wazuh/sample_events/normal_benign.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:sentrix
+  python3 -m ocsf.mapper wazuh wazuh/sample_events/normal_benign.json | docker compose -f wazuh/docker-compose.yml exec -T wazuh.manager /var/ossec/bin/wazuh-logtest -U 100200:0:vestrix
 } 2>&1 | tee wazuh/sample_events/logtest_output.txt
 ```
 
@@ -117,7 +117,7 @@ Rule `100210` wraps two current built-in OpenSSH brute-force detections:
 Rule `100210` is a level-1, `no_log` helper that retains either built-in result.
 Rule `100211` then combines current-event `<if_sid>100201</if_sid>` with
 prior-event `<if_matched_sid>100210</if_matched_sid>` in a 120-second window.
-The direction is deliberately auth anomaly first, Sentrix intrusion second.
+The direction is deliberately auth anomaly first, Vestrix intrusion second.
 
 To exercise the correlation in one persistent `wazuh-logtest` session, start:
 
@@ -127,7 +127,7 @@ sudo /var/ossec/bin/wazuh-logtest -v
 
 For the live verification, eight same-source invalid-user SSH events first
 triggered base rule `5710`; the eighth produced helper `100210` through built-in
-rule `5712`. The following Sentrix event fired `100211` at level 14. The actual
+rule `5712`. The following Vestrix event fired `100211` at level 14. The actual
 phase output is saved in
 [`sample_events/logtest_output.txt`](sample_events/logtest_output.txt).
 

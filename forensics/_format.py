@@ -38,7 +38,7 @@ class RecordFormatError(ValueError):
 
 
 def canonical_json_bytes(value: Mapping[str, Any]) -> bytes:
-    """Serialize a mapping using the normative Sentrix JSON encoding."""
+    """Serialize a mapping using the normative Vestrix JSON encoding."""
     try:
         serialized = json.dumps(
             value,

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "source": "sentrix",
-  "event_id": "sentrix-20260713T201613Z-node-08-0043",
+  "source": "vestrix",
+  "event_id": "vestrix-20260713T201613Z-node-08-0043",
   "ts_utc": "2026-07-13T20:16:13.225Z",
   "node_id": "node-08",
   "site_id": "hq-karachi",

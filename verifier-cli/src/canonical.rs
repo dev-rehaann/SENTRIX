@@ -1,4 +1,4 @@
-//! Canonical JSON parsing and serialization for Sentrix chain records.
+//! Canonical JSON parsing and serialization for Vestrix chain records.
 //!
 //! The chain format specifies Python 3.11 `json.dumps` output. In particular,
 //! binary64 exponent formatting differs from serde_json, so floats are

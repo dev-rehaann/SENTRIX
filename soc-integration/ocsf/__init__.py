@@ -1,1 +1,1 @@
-"""Sentrix SOC output mappers."""
+"""Vestrix SOC output mappers."""

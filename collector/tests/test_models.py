@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from sentrix_collector.models import PayloadValidationError, validate_payload
+from vestrix_collector.models import PayloadValidationError, validate_payload
 
 
 def test_payload_schema_rejects_unknown_fields() -> None:

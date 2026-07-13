@@ -1,4 +1,4 @@
-//! `sentrix-verify`: a read-only, independent forensic verifier.
+//! `vestrix-verify`: a read-only, independent forensic verifier.
 
 #![forbid(unsafe_code)]
 
@@ -8,10 +8,10 @@ use std::process::ExitCode;
 
 use clap::{Parser, Subcommand};
 
-use sentrix_verifier_cli::{anchor, chain};
+use vestrix_verifier_cli::{anchor, chain};
 
 #[derive(Debug, Parser)]
-#[command(name = "sentrix-verify", version, about)]
+#[command(name = "vestrix-verify", version, about)]
 struct Cli {
     #[command(subcommand)]
     command: Command,

@@ -7,7 +7,7 @@ use ed25519_dalek::{Signer, SigningKey};
 use serde_json::{Map, Value, json};
 use sha2::{Digest, Sha256};
 
-use sentrix_verifier_cli::canonical;
+use vestrix_verifier_cli::canonical;
 
 const PUBLIC_KEY: &str = "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8";
 const STORED_LINE: &str = concat!(
@@ -26,7 +26,7 @@ impl Fixture {
             .expect("system clock should be after the epoch")
             .as_nanos();
         let directory = std::env::temp_dir().join(format!(
-            "sentrix-verifier-test-{}-{nonce}",
+            "vestrix-verifier-test-{}-{nonce}",
             std::process::id()
         ));
         fs::create_dir(&directory).expect("create test directory");
@@ -47,13 +47,13 @@ impl Drop for Fixture {
 }
 
 fn verify(chain: &Path, key: &Path) -> std::process::Output {
-    Command::new(env!("CARGO_BIN_EXE_sentrix-verify"))
+    Command::new(env!("CARGO_BIN_EXE_vestrix-verify"))
         .args(["chain"])
         .arg(chain)
         .args(["--pubkey"])
         .arg(key)
         .output()
-        .expect("run sentrix-verify")
+        .expect("run vestrix-verify")
 }
 
 fn encode_hex(bytes: &[u8]) -> String {
@@ -246,7 +246,7 @@ fn anchor_nonzero_output_is_not_misrepresented_as_chain_corruption() {
     let fixture = Fixture::new();
     let missing_chain = fixture.directory.join("missing-chain.jsonl");
     let missing_proof = fixture.directory.join("missing-proof.ots");
-    let output = Command::new(env!("CARGO_BIN_EXE_sentrix-verify"))
+    let output = Command::new(env!("CARGO_BIN_EXE_vestrix-verify"))
         .args(["anchor"])
         .arg(missing_chain)
         .args(["--ots-proof"])

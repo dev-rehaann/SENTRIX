@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sentrix-forensics"
+name = "vestrix-forensics"
 version = "0.1.0"
-description = "Tamper-evident event logging for Sentrix"
+description = "Tamper-evident event logging for Vestrix"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Apache-2.0" }

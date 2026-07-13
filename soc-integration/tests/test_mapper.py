@@ -49,15 +49,15 @@ def test_ocsf_detection_finding_required_fields_and_types(sample_path: Path) -> 
     assert metadata["version"] == "1.8.0"
     assert metadata["original_event_uid"] == source["event_id"]
     assert metadata["original_time"] == source["ts_utc"]
-    assert metadata["product"]["name"] == "Sentrix"
-    assert metadata["product"]["vendor_name"] == "Sentrix"
+    assert metadata["product"]["name"] == "Vestrix"
+    assert metadata["product"]["vendor_name"] == "Vestrix"
 
     finding_info = event["finding_info"]
     assert finding_info["uid"] == source["event_id"]
     assert finding_info["analytic"]["uid"] == source["model_id"]
     assert finding_info["analytic"]["type_id"] == 4
     assert event["device"]["uid"] == source["node_id"]
-    assert event["unmapped"]["sentrix"] == source
+    assert event["unmapped"]["vestrix"] == source
 
 
 @pytest.mark.parametrize("sample_path", SAMPLE_PATHS, ids=lambda path: path.stem)
@@ -66,7 +66,7 @@ def test_wazuh_shape_matches_json_decoder_contract(sample_path: Path) -> None:
 
     event = to_wazuh(source)
 
-    assert event["source"] == "sentrix"
+    assert event["source"] == "vestrix"
     assert event["class"] == source["class"]
     assert event["confidence"] == source["confidence"]
     assert event["confidence_level"] == source["confidence_level"]
@@ -91,7 +91,7 @@ def test_wazuh_decoder_uses_json_plugin_and_expected_dynamic_fields() -> None:
         encoding="utf-8"
     )
     decoder_root = ET.fromstring(f"<root>{decoder_text}</root>")
-    decoder = decoder_root.find("./decoder[@name='sentrix']")
+    decoder = decoder_root.find("./decoder[@name='vestrix']")
     assert decoder is not None
     assert decoder.findtext("parent") == "json"
     assert decoder.findtext("use_own_name") == "true"
@@ -100,7 +100,7 @@ def test_wazuh_decoder_uses_json_plugin_and_expected_dynamic_fields() -> None:
     assert decoder.find("regex") is None
 
     rules = ET.parse(ROOT / "wazuh" / "rules" / "local_rules.xml").getroot()
-    assert rules.attrib["name"] == "sentrix,physical_intrusion,"
+    assert rules.attrib["name"] == "vestrix,physical_intrusion,"
     rule_fields = {field.attrib["name"] for field in rules.findall(".//field")}
     assert {"source", "class", "confidence_level", "pacs_event_status"} <= rule_fields
 

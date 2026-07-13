@@ -1,7 +1,7 @@
-# Sentrix forensic chain format, version 1
+# Vestrix forensic chain format, version 1
 
-This document is the normative, byte-level specification for the first Sentrix
-forensic chain format. A verifier does not need any Sentrix writer code to
+This document is the normative, byte-level specification for the first Vestrix
+forensic chain format. A verifier does not need any Vestrix writer code to
 implement it. There is no version field in version 1; deployments must associate
 this specification with the chain out of band.
 

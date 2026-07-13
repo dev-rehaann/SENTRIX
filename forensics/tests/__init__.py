@@ -1,1 +1,1 @@
-"""Tests for the Sentrix forensic logger."""
+"""Tests for the Vestrix forensic logger."""

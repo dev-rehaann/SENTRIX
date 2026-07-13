@@ -1,4 +1,4 @@
-"""Independent-facing verification API for a Sentrix forensic chain."""
+"""Independent-facing verification API for a Vestrix forensic chain."""
 
 from __future__ import annotations
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sentrix — project CA + per-node cert generator.
+# Vestrix — project CA + per-node cert generator.
 # NOT production-hardened as-is: no revocation, no HSM, no passphrase on keys.
 # Good enough for v0.1 bring-up; revisit before any real deployment.
 set -euo pipefail
@@ -11,7 +11,7 @@ if [ ! -f ca.key ]; then
   echo "[*] Generating project root CA..."
   openssl genrsa -out ca.key 4096
   openssl req -x509 -new -key ca.key -days 3650 -out ca.crt \
-    -subj "/CN=Sentrix Root CA"
+    -subj "/CN=Vestrix Root CA"
 else
   echo "[*] Root CA already exists, skipping."
 fi

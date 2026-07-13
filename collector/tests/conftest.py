@@ -121,7 +121,7 @@ def certificates(tmp_path: Path) -> CertificateBundle:
     ca_key = _new_key()
     now = datetime.now(UTC)
     ca_subject = x509.Name(
-        [x509.NameAttribute(NameOID.COMMON_NAME, "Sentrix pytest CA")]
+        [x509.NameAttribute(NameOID.COMMON_NAME, "Vestrix pytest CA")]
     )
     ca_cert = (
         x509.CertificateBuilder()

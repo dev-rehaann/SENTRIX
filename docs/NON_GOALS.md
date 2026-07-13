@@ -5,7 +5,7 @@ living non-goals list is part of the credibility story: RuView lost
 credibility retracting an inflated "100% detection" claim; a public,
 maintained non-goals section is the antidote.
 
-## What Sentrix is not trying to be
+## What Vestrix is not trying to be
 
 - **Not** matching RuView's ~105-module breadth. Depth in one defensible
   niche (security + forensics + SOC integration) beats breadth across many
@@ -19,7 +19,7 @@ maintained non-goals section is the antidote.
 - **Not** claiming novelty in WiFi CSI sensing, ESP32 CSI extraction, or
   ML-classified presence detection. All of that is prior art (10+ years of
   academic work; ESPectre already does open-source CSI motion sensing for
-  smart homes). Sentrix's claim is narrower: the integration of security-first
+  smart homes). Vestrix's claim is narrower: the integration of security-first
   design, forensic chain-of-custody, and native SOC/SIEM correlation around
   that sensing — a combination that doesn't exist elsewhere, open or
   commercial.

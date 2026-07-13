@@ -2,7 +2,7 @@
 
 ## Our commitment
 
-Sentrix is a security and forensics tool used across widely different contexts — home labs, research, and eventually enterprise SOC environments. We want the project's community to be as trustworthy as the software: welcoming, harassment-free, and professional.
+Vestrix is a security and forensics tool used across widely different contexts — home labs, research, and eventually enterprise SOC environments. We want the project's community to be as trustworthy as the software: welcoming, harassment-free, and professional.
 
 ## Expected behavior
 

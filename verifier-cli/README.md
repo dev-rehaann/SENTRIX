@@ -1,9 +1,9 @@
-# Sentrix independent verifier
+# Vestrix independent verifier
 
-`sentrix-verify` is a small, read-only Rust verifier for the Sentrix forensic
+`vestrix-verify` is a small, read-only Rust verifier for the Vestrix forensic
 JSONL chain format. It is a separate codebase from the collector and Python
 forensics pipeline. Its contract is the published `CHAIN_FORMAT.md`, not any
-Sentrix implementation.
+Vestrix implementation.
 
 ## Build and test
 
@@ -17,7 +17,7 @@ cargo fmt --check
 cargo clippy --all-targets --all-features -- -D warnings
 ```
 
-The binary is `target/release/sentrix-verify` (or `.exe` on Windows).
+The binary is `target/release/vestrix-verify` (or `.exe` on Windows).
 
 Dependencies are intentionally narrow: `serde`/`serde_json` parse untrusted
 JSON, `sha2` computes record and OTS operation hashes, `ed25519-dalek` verifies
@@ -28,7 +28,7 @@ serializer can reproduce CPython's required float spelling.
 ## Chain verification
 
 ```console
-sentrix-verify chain evidence/chain.jsonl --pubkey keys/logger-public.hex
+vestrix-verify chain evidence/chain.jsonl --pubkey keys/logger-public.hex
 ```
 
 The public-key file may contain exactly 32 raw Ed25519 public-key bytes, or 64
@@ -47,7 +47,7 @@ chain verification failed at seq 17: record_hash mismatch
 ## OpenTimestamps anchor status
 
 ```console
-sentrix-verify anchor evidence/chain.jsonl --ots-proof evidence/tip.ots
+vestrix-verify anchor evidence/chain.jsonl --ots-proof evidence/tip.ots
 ```
 
 **A non-zero `anchor` exit does not mean the chain is corrupt or tampered.**
@@ -75,8 +75,8 @@ unauthenticated public web API into a forensic pass.
 
 ## What this tool does not do
 
-- It does not connect to or control the Sentrix collector.
-- It does not import, execute, or trust any other Sentrix component.
+- It does not connect to or control the Vestrix collector.
+- It does not import, execute, or trust any other Vestrix component.
 - It does not repair, rewrite, append, delete, or otherwise modify evidence.
 - It does not decide whether signed event contents are factually correct.
 - It does not claim a fully verified Bitcoin timestamp in this release.

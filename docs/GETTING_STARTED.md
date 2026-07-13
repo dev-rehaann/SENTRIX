@@ -15,7 +15,7 @@ pip install numpy scipy pandas scikit-learn xgboost shap cryptography
 ## 2. First node
 
 ```bash
-idf.py create-project sentrix-node
+idf.py create-project vestrix-node
 # wire in CSI capture in firmware/main/
 idf.py -p /dev/ttyUSB0 flash monitor
 ```
@@ -29,7 +29,7 @@ Stand up the project CA (see `docs/architecture.md` and the `openssl` commands b
 ```bash
 # Minimal project CA — a starting point, not production-hardened
 openssl genrsa -out ca.key 4096
-openssl req -x509 -new -key ca.key -days 3650 -out ca.crt -subj "/CN=Sentrix Root CA"
+openssl req -x509 -new -key ca.key -days 3650 -out ca.crt -subj "/CN=Vestrix Root CA"
 
 # Per-node certificate
 openssl genrsa -out node-07.key 2048

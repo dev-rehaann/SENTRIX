@@ -1,6 +1,6 @@
 # Benchmarks
 
-No benchmarks published yet — this file will hold the versioned, dated history of Sentrix's detection accuracy once a baseline model exists.
+No benchmarks published yet — this file will hold the versioned, dated history of Vestrix's detection accuracy once a baseline model exists.
 
 ## Format for future entries
 

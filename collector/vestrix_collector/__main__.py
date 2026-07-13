@@ -13,7 +13,7 @@ from .server import CollectorServer
 
 
 def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run the Sentrix CSI collector")
+    parser = argparse.ArgumentParser(description="Run the Vestrix CSI collector")
     parser.add_argument(
         "--config",
         type=Path,

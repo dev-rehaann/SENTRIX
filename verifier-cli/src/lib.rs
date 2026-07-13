@@ -1,6 +1,6 @@
-//! Independent verification of the Sentrix forensic chain format.
+//! Independent verification of the Vestrix forensic chain format.
 //!
-//! Trust model: this crate shares no code with the Sentrix collector or its
+//! Trust model: this crate shares no code with the Vestrix collector or its
 //! Python forensics pipeline. It treats chain bytes, public keys, and OTS
 //! proofs as untrusted input. The only shared contract is the published chain
 //! format. Successful chain verification means that every stored record is

@@ -15,7 +15,7 @@ from ._format import (
 )
 from ._store import StoreError, chain_tip
 
-STORE_PATH_ENV = "SENTRIX_FORENSICS_STORE"
+STORE_PATH_ENV = "VESTRIX_FORENSICS_STORE"
 DEFAULT_STORE_PATH = Path(__file__).resolve().parent / "store" / "chain.jsonl"
 LOCK_TIMEOUT_SECONDS = 30.0
 

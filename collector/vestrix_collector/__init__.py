@@ -1,4 +1,4 @@
-"""Sentrix's authenticated CSI ingest service."""
+"""Vestrix's authenticated CSI ingest service."""
 
 from .config import CollectorConfig, load_config
 from .models import CSIEvent

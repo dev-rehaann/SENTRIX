@@ -1,6 +1,6 @@
 ---
 name: Benchmark report / correction
-about: Submit or correct a Sentrix accuracy/benchmark result
+about: Submit or correct a Vestrix accuracy/benchmark result
 title: "[BENCHMARK] "
 labels: benchmark
 assignees: ''

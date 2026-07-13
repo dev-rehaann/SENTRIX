@@ -1,4 +1,4 @@
-# Sentrix — Project Initialization Guide
+# Vestrix — Project Initialization Guide
 
 *Forensics-grade, open-source WiFi CSI intrusion detection platform — full build reference, v0.1 → v1.0*
 
@@ -6,7 +6,7 @@
 **Scope:** A→Z: mission, architecture, stack, security, ML, roadmap, community
 **Last updated:** July 8, 2026
 
-> **Ground rule:** Sentrix ships fully open — no paywalled tier, no closed modules, nothing held back. "Complete" means the whole feature set (sensing, ML, forensics, SOC integration) is public from day one of each capability — it does not mean relaxing the honesty-in-benchmarking principle to get there faster.
+> **Ground rule:** Vestrix ships fully open — no paywalled tier, no closed modules, nothing held back. "Complete" means the whole feature set (sensing, ML, forensics, SOC integration) is public from day one of each capability — it does not mean relaxing the honesty-in-benchmarking principle to get there faster.
 
 ## Contents
 1. Mission & Problem Statement
@@ -32,7 +32,7 @@
 
 ## 1. Mission & Problem Statement
 
-Sentrix turns commodity ESP32 hardware into forensics-grade WiFi CSI (Channel State Information) sensors for intrusion detection — built so its output survives a SOC analyst's workflow *and* a courtroom's scrutiny, not just a research demo.
+Vestrix turns commodity ESP32 hardware into forensics-grade WiFi CSI (Channel State Information) sensors for intrusion detection — built so its output survives a SOC analyst's workflow *and* a courtroom's scrutiny, not just a research demo.
 
 WiFi CSI sensing itself is a mature, decade-old research field — that is **not** the novelty claim. What's actually missing from the existing tooling landscape, including the strongest open competitor (RuView, github.com/ruvnet/ruview), is:
 
@@ -40,7 +40,7 @@ WiFi CSI sensing itself is a mature, decade-old research field — that is **not
 - **Forensic chain-of-custody** — no tamper-evident logging that would hold up as evidence
 - **Native SOC/SIEM integration** — CSI alerts don't flow into the tools analysts already use
 
-Sentrix's novelty is the **integration** of these three things around CSI sensing. Repeat that framing everywhere the project is described publicly — claiming novelty in the sensing itself won't survive scrutiny from the WiFi sensing research community, and it doesn't need to.
+Vestrix's novelty is the **integration** of these three things around CSI sensing. Repeat that framing everywhere the project is described publicly — claiming novelty in the sensing itself won't survive scrutiny from the WiFi sensing research community, and it doesn't need to.
 
 ## 2. Non-Goals — Explicit Scope Boundaries
 
@@ -53,7 +53,7 @@ Keep this section updated, not deleted, as the project matures. A living non-goa
 ## 3. Core Design Principles
 
 1. **Security-first** — every design choice defaults to the option that resists tampering and spoofing, even at some cost to convenience
-2. **Forensic-grade** — anything Sentrix outputs must be defensible if it ends up in an investigation or a courtroom
+2. **Forensic-grade** — anything Vestrix outputs must be defensible if it ends up in an investigation or a courtroom
 3. **Honest benchmarking** — false-positive/false-negative rates are published, dated, and reproducible from v0.1 onward, never smoothed over
 4. **Fully open, no gating** — no restricted or paywalled tier, per your direction. Every layer ships open, always
 5. **Standards over invention** — wherever NIST, ISO, OCSF, MITRE, or IEEE already has a standard, map to it instead of designing something bespoke
@@ -64,10 +64,10 @@ One license, no dual-licensing, no "core vs. enterprise" split.
 
 **Recommended: Apache 2.0**
 - Explicit patent grant + patent-retaliation clause — meaningful for a project doing signal-processing/detection work, where patent claims are a realistic risk
-- Permissive enough that SOC vendors and enterprises can integrate Sentrix without legal friction — this is what actually gets the "native SOC integration" pillar adopted in the wild
+- Permissive enough that SOC vendors and enterprises can integrate Vestrix without legal friction — this is what actually gets the "native SOC integration" pillar adopted in the wild
 - Requires stating changes to modified files, which keeps forks honestly labeled
 
-**Alternative: AGPLv3** — if the priority is stopping someone from wrapping Sentrix as a closed hosted service without contributing back. Trade-off: some enterprises have blanket no-AGPL policies, which could work against SOC-vendor adoption. (For reference, Wazuh's own core is GPLv2 — not a constraint on your choice, just useful context for the ecosystem you're integrating with.)
+**Alternative: AGPLv3** — if the priority is stopping someone from wrapping Vestrix as a closed hosted service without contributing back. Trade-off: some enterprises have blanket no-AGPL policies, which could work against SOC-vendor adoption. (For reference, Wazuh's own core is GPLv2 — not a constraint on your choice, just useful context for the ecosystem you're integrating with.)
 
 *This is general OSS practice, not legal advice — worth a lawyer's quick pass before the v0.1 tag if anything patent-adjacent is in play.*
 
@@ -125,7 +125,7 @@ Keep the trust boundaries in the code, not just in the diagram: a broken ML mode
 ```bash
 # Minimal project CA — a starting point, not production-hardened
 openssl genrsa -out ca.key 4096
-openssl req -x509 -new -key ca.key -days 3650 -out ca.crt -subj "/CN=Sentrix Root CA"
+openssl req -x509 -new -key ca.key -days 3650 -out ca.crt -subj "/CN=Vestrix Root CA"
 
 # Per-node certificate
 openssl genrsa -out node-07.key 2048
@@ -154,9 +154,9 @@ openssl x509 -req -in node-07.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out 
 }
 ```
 
-**OpenTimestamps** — periodically anchor the current chain tip to the Bitcoin blockchain (free) for an independently verifiable "this existed before time X" proof that doesn't depend on trusting Sentrix's own clock.
+**OpenTimestamps** — periodically anchor the current chain tip to the Bitcoin blockchain (free) for an independently verifiable "this existed before time X" proof that doesn't depend on trusting Vestrix's own clock.
 
-**Independent verifier CLI** — a separate, minimal codebase whose only job is: given a log file and a timestamp proof, confirm the chain is unbroken and the anchor is valid. No shared code with the main pipeline — the entire point is that someone who doesn't trust the main Sentrix codebase can still trust the verification.
+**Independent verifier CLI** — a separate, minimal codebase whose only job is: given a log file and a timestamp proof, confirm the chain is unbroken and the anchor is valid. No shared code with the main pipeline — the entire point is that someone who doesn't trust the main Vestrix codebase can still trust the verification.
 
 **Chain-of-custody documentation** — every exported forensic report auto-generates a custody log: who/what pulled the data, when, with the verifier's output attached.
 
@@ -176,11 +176,11 @@ openssl x509 -req -in node-07.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out 
 
 ```xml
 <!-- decoder — illustrative starting point -->
-<decoder name="sentrix">
-  <prematch>sentrix_alert:</prematch>
+<decoder name="vestrix">
+  <prematch>vestrix_alert:</prematch>
 </decoder>
-<decoder name="sentrix_fields">
-  <parent>sentrix</parent>
+<decoder name="vestrix_fields">
+  <parent>vestrix</parent>
   <regex>node_id=(\S+) severity=(\S+) shap_top=(\S+)</regex>
   <order>node_id, severity, shap_top</order>
 </decoder>
@@ -188,9 +188,9 @@ openssl x509 -req -in node-07.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out 
 ```xml
 <!-- rule — illustrative starting point -->
 <rule id="100201" level="10">
-  <decoded_as>sentrix</decoded_as>
-  <description>Sentrix CSI intrusion alert: $(shap_top)</description>
-  <group>sentrix,physical_security,</group>
+  <decoded_as>vestrix</decoded_as>
+  <description>Vestrix CSI intrusion alert: $(shap_top)</description>
+  <group>vestrix,physical_security,</group>
 </rule>
 ```
 
@@ -233,7 +233,7 @@ Not finalized. Don't let the rest of the build wait on it, but don't skip it eit
 | 1 | v0.2–v0.3 | Baseline detection | Feature extraction, Random Forest baseline | Reproducible benchmark report published, however unflattering |
 | 2 | v0.4–v0.5 | Security hardening | mTLS enrollment/rotation, hash-chained log | No unauthenticated node can inject data; tamper-evidence verified |
 | 3 | v0.6–v0.7 | SOC + explainability | XGBoost option, SHAP, Wazuh decoders/rules, OCSF output | Alerts show up, explained, inside a real Wazuh instance |
-| 4 | v0.8–v0.9 | Independent verification + dataset | Verifier CLI, OpenTimestamps anchoring, labeled dataset live on Zenodo with DOI | A third party can verify a log without running Sentrix itself |
+| 4 | v0.8–v0.9 | Independent verification + dataset | Verifier CLI, OpenTimestamps anchoring, labeled dataset live on Zenodo with DOI | A third party can verify a log without running Vestrix itself |
 | 5 | v1.0 | Credibility push | Full docs, published threat model, Arsenal/DFRWS submission-ready | External reviewer feedback incorporated |
 
 This is a reconstruction consistent with everything already locked in — adjust tier boundaries freely if the original roadmap doc has more specific version cuts in mind.
@@ -241,7 +241,7 @@ This is a reconstruction consistent with everything already locked in — adjust
 ## 14. Repository Structure
 
 ```
-sentrix/
+vestrix/
 ├── firmware/                 # ESP32 CSI capture firmware (ESP-IDF)
 │   ├── main/
 │   └── components/
@@ -282,7 +282,7 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install numpy scipy pandas scikit-learn xgboost shap cryptography
 ```
 
-**2. First node** — `idf.py create-project sentrix-node`, wire in CSI capture, `idf.py -p /dev/ttyUSB0 flash monitor` to confirm raw frames reach a throwaway dev collector (no security yet — just prove the pipeline).
+**2. First node** — `idf.py create-project vestrix-node`, wire in CSI capture, `idf.py -p /dev/ttyUSB0 flash monitor` to confirm raw frames reach a throwaway dev collector (no security yet — just prove the pipeline).
 
 **3. mTLS** — stand up the project CA (openssl commands in §7), issue a node cert, require the collector to reject anything unsigned.
 

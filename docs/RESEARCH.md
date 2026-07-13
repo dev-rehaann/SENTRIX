@@ -1,4 +1,4 @@
-# Sentrix — Research & Roadmap
+# Vestrix — Research & Roadmap
 ### Turning a strong idea into a defensible, citable, category-defining open-source security tool
 
 *Compiled from current academic literature, standards documents, and prior-art analysis. Last updated July 2026.*
@@ -13,7 +13,7 @@ This isn't a wishlist — every recommendation below is tied to a real paper, st
 
 ## 1. The honest positioning (read this section first)
 
-Your own design principle — *"honestly reported accuracy... no inflated benchmarks... no marketing claims"* — has to apply to the novelty claim too, or the first serious infosec person who looks at Sentrix will tear it apart in the GitHub issues. Here's the accurate version, and it's still a strong pitch:
+Your own design principle — *"honestly reported accuracy... no inflated benchmarks... no marketing claims"* — has to apply to the novelty claim too, or the first serious infosec person who looks at Vestrix will tear it apart in the GitHub issues. Here's the accurate version, and it's still a strong pitch:
 
 | Claim | Verdict | Why |
 |---|---|---|
@@ -34,7 +34,7 @@ Your own design principle — *"honestly reported accuracy... no inflated benchm
 | **ESPectre** (F. Pace)                                                                              | Open source, GPLv3 | ESP32 CSI, MVS/PCA    | None by design (statistical only) | None                           | None                | Home Assistant automation                                           |
 | **Cognitive Systems Aura / WiFi Motion**                                                            | Commercial, closed | Router-based CSI/RSSI | Proprietary ML                    | None published                 | None                | Consumer home security                                              |
 | **Academic CSI-HAR systems** (TW-See, attention-enhanced through-wall models, WiFi-DensePose, etc.) | Research code      | CSI, various          | CNN/attention/deep models         | None                           | None                | Pose, vitals, gesture, health — security is one use-case among many |
-| **Sentrix (proposed)**                                                                              | Open source        | ESP32 CSI             | RF/XGBoost, explainable           | Hash-chained, chain-of-custody | Native Wazuh + OCSF | Security only, narrow scope                                         |
+| **Vestrix (proposed)**                                                                              | Open source        | ESP32 CSI             | RF/XGBoost, explainable           | Hash-chained, chain-of-custody | Native Wazuh + OCSF | Security only, narrow scope                                         |
 
 Some specifics worth knowing before you build:
 
@@ -118,31 +118,31 @@ def make_record(prev_hash: str, event: dict, signer) -> dict:
 
 ### Tier 2 — SOC/SIEM native integration
 - Emit **JSON**, not free-text — Wazuh's JSON decoder is far more robust than regex-based decoders for a growing schema.
-- Ship a native decoder + rule group (`sentrix, physical_intrusion`) so users get correlation out of the box:
+- Ship a native decoder + rule group (`vestrix, physical_intrusion`) so users get correlation out of the box:
 
 ```xml
 <!-- decoders/local_decoder.xml -->
-<decoder name="sentrix"><prematch>"source": "sentrix"</prematch></decoder>
-<decoder name="sentrix_json">
-  <parent>sentrix</parent>
+<decoder name="vestrix"><prematch>"source": "vestrix"</prematch></decoder>
+<decoder name="vestrix_json">
+  <parent>vestrix</parent>
   <plugin_decoder>JSON_Decoder</plugin_decoder>
 </decoder>
 ```
 ```xml
 <!-- rules/local_rules.xml (illustrative — validate with wazuh-logtest) -->
-<group name="sentrix,physical_intrusion,">
+<group name="vestrix,physical_intrusion,">
   <rule id="100201" level="10">
-    <decoded_as>sentrix_json</decoded_as>
+    <decoded_as>vestrix_json</decoded_as>
     <field name="class">intrusion</field>
-    <description>Sentrix: high-confidence physical intrusion, zone $(zone)</description>
+    <description>Vestrix: high-confidence physical intrusion, zone $(zone)</description>
   </rule>
   <rule id="100202" level="14">
     <if_matched_sid>100201</if_matched_sid>
-    <description>Sentrix intrusion correlated with an authentication anomaly</description>
+    <description>Vestrix intrusion correlated with an authentication anomaly</description>
   </rule>
 </group>
 ```
-- Don't lock yourself to Wazuh: also ship an **OCSF-formatted** output profile. OCSF (now under the Linux Foundation, backed by AWS/Splunk/CrowdStrike/Broadcom and others) is rapidly becoming the industry-standard schema for security events — supporting it means Splunk, Elastic, and Sentinel users can ingest Sentrix too, not just Wazuh shops.
+- Don't lock yourself to Wazuh: also ship an **OCSF-formatted** output profile. OCSF (now under the Linux Foundation, backed by AWS/Splunk/CrowdStrike/Broadcom and others) is rapidly becoming the industry-standard schema for security events — supporting it means Splunk, Elastic, and Sentinel users can ingest Vestrix too, not just Wazuh shops.
 - Because there's no existing ATT&CK/CAPEC technique family for *physical* intrusion detection specifically (CAPEC has a "Physical" attack category, but it's thin), consider publishing your own small **physical-access correlation taxonomy** — a genuinely citable contribution in its own right.
 - Concrete correlation rules to ship as examples: (a) CSI alert + failed VPN/auth logins from the same site in a short window → composite high-confidence alert; (b) CSI alert with no corresponding badge/PACS swipe → unauthorized-entry alert; (c) a sensor-tamper event correlated with any alert suppression → possible adversarial interference.
 
@@ -226,7 +226,7 @@ You asked for this explicitly, so here it is as a direct table — this is also 
 "Famous" in this niche looks like *respected and cited*, not viral — and that's actually easier to engineer deliberately:
 
 1. **GitHub hygiene first**: a README with a 10-second demo GIF, an architecture diagram, and honestly-reported per-environment metrics (not one inflated headline number) will outperform hype every time with this audience.
-2. **Black Hat Arsenal** — an open-source tool showcase with a standing Call for Tools; submissions require only a working code repo, no payment, and are reviewed purely on merit. A very natural fit for Sentrix.
+2. **Black Hat Arsenal** — an open-source tool showcase with a standing Call for Tools; submissions require only a working code repo, no payment, and are reviewed purely on merit. A very natural fit for Vestrix.
 3. **DEF CON demo labs / BSides talks** — lower barrier to entry than Black Hat, good for early traction and feedback.
 4. **DFRWS (Digital Forensics Research Workshop)** — has a lightweight "Practitioner Presentations & Demos" track (a ~500-word proposal, not a full paper) that's a much easier on-ramp than academic peer review, and full research papers are published in *Forensic Science International: Digital Investigation* (Elsevier) if you later want to formalize the forensic-logging design as a paper — squarely in your wheelhouse given your background.
 5. **Release the intrusion dataset (Tier 5) with a Zenodo DOI.** Datasets get cited independently of your tool adoption — this is a durable, compounding form of visibility that a single flashy launch post isn't.

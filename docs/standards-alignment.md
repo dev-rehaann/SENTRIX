@@ -1,8 +1,8 @@
 # Standards Alignment
 
-Wherever an existing standard already covers a design area, Sentrix maps to it instead of inventing something bespoke.
+Wherever an existing standard already covers a design area, Vestrix maps to it instead of inventing something bespoke.
 
-| Standard / body of work | What it gives Sentrix | Where it applies |
+| Standard / body of work | What it gives Vestrix | Where it applies |
 |---|---|---|
 | Schneier & Kelsey (1999); Crosby & Wallach (USENIX Security '09) | Canonical hash-chain / Merkle-tree tamper-evident logging design | `forensics/` |
 | NIST SP 800-86 | Four-phase forensic process: collection → examination → analysis → reporting | Overall evidence pipeline design |
@@ -17,7 +17,7 @@ Wherever an existing standard already covers a design area, Sentrix maps to it i
 
 ## Prior art acknowledgment
 
-Sentrix does not claim novelty in WiFi CSI sensing, ESP32 CSI extraction, or ML-classified presence detection. Relevant prior art includes:
+Vestrix does not claim novelty in WiFi CSI sensing, ESP32 CSI extraction, or ML-classified presence detection. Relevant prior art includes:
 
 - ESP32-CSI-Tool (Hernandez & Bulut) — https://github.com/StevenMHernandez/ESP32-CSI-Tool
 - esp-csi (Espressif, official) — https://github.com/espressif/esp-csi

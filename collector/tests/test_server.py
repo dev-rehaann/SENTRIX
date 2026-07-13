@@ -12,9 +12,9 @@ from typing import Any
 import pytest
 from conftest import CertificateBundle, Identity
 
-from sentrix_collector.config import CollectorConfig, ServerConfig, TLSConfig
-from sentrix_collector.models import CSIEvent
-from sentrix_collector.server import CollectorServer
+from vestrix_collector.config import CollectorConfig, ServerConfig, TLSConfig
+from vestrix_collector.models import CSIEvent
+from vestrix_collector.server import CollectorServer
 
 
 def _payload(sequence_number: int = 1) -> dict[str, object]:
@@ -136,7 +136,7 @@ def test_self_signed_client_certificate_is_rejected_during_tls(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     received: list[CSIEvent] = []
-    caplog.set_level(logging.INFO, logger="sentrix_collector.decisions")
+    caplog.set_level(logging.INFO, logger="vestrix_collector.decisions")
 
     async def scenario(server: CollectorServer) -> None:
         with pytest.raises(ssl.SSLError):

@@ -6,7 +6,7 @@
 | 1 | v0.2–v0.3 | Baseline detection | Feature extraction, Random Forest baseline | Reproducible benchmark report published, however unflattering |
 | 2 | v0.4–v0.5 | Security hardening | mTLS enrollment/rotation, hash-chained log | No unauthenticated node can inject data; tamper-evidence verified |
 | 3 | v0.6–v0.7 | SOC + explainability | XGBoost option, SHAP, Wazuh decoders/rules, OCSF output | Alerts show up, explained, inside a real Wazuh instance |
-| 4 | v0.8–v0.9 | Independent verification + dataset | Verifier CLI, OpenTimestamps anchoring, labeled dataset live on Zenodo with DOI | A third party can verify a log without running Sentrix itself |
+| 4 | v0.8–v0.9 | Independent verification + dataset | Verifier CLI, OpenTimestamps anchoring, labeled dataset live on Zenodo with DOI | A third party can verify a log without running Vestrix itself |
 | 5 | v1.0 | Credibility push | Full docs, published threat model, Arsenal/DFRWS submission-ready | External reviewer feedback incorporated |
 
 ## Rigor checklist (apply at every ML-affecting milestone)

@@ -1,6 +1,6 @@
 # Security Policy
 
-Sentrix is a physical-intrusion detection tool with a forensic-evidence chain — vulnerabilities here have unusually direct real-world consequences (a bypassed sensor is a physical security failure, not just a software bug). We take reports seriously.
+Vestrix is a physical-intrusion detection tool with a forensic-evidence chain — vulnerabilities here have unusually direct real-world consequences (a bypassed sensor is a physical security failure, not just a software bug). We take reports seriously.
 
 ## Reporting a vulnerability
 

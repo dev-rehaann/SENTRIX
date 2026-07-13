@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a non-security bug in Sentrix
+about: Report a non-security bug in Vestrix
 title: "[BUG] "
 labels: bug
 assignees: ''
@@ -21,7 +21,7 @@ What you expected to happen instead.
 - ESP32 board revision (if firmware-related):
 - OS / Python version (if pipeline/ML-related):
 - Wazuh version (if SOC-integration-related):
-- Sentrix version / commit:
+- Vestrix version / commit:
 
 **Additional context**
 Logs, screenshots, or anything else relevant.

@@ -1,5 +1,5 @@
 blank_issues_enabled: true
 contact_links:
   - name: Security vulnerability disclosure
-    url: https://github.com/YOUR-ORG/sentrix/security/advisories/new
+    url: https://github.com/YOUR-ORG/vestrix/security/advisories/new
     about: Please report security vulnerabilities privately — do not use a public issue. See SECURITY.md.

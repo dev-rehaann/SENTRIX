@@ -72,7 +72,7 @@ class CollectorServer:
     ) -> None:
         self._config = config
         self._event_logger = event_logger or forensics.log_event
-        self._logger = logger or logging.getLogger("sentrix_collector.decisions")
+        self._logger = logger or logging.getLogger("vestrix_collector.decisions")
         self._enrolled_nodes = load_enrolled_nodes(config.allowlist_path)
         self._tls_context = build_server_tls_context(config)
         self._sequence_lock = threading.Lock()

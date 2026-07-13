@@ -1,16 +1,16 @@
-# Sentrix
+# Vestrix
 
 **Forensics-grade, open-source WiFi CSI intrusion detection.**
 
-Sentrix turns commodity ESP32 hardware into through-wall presence/intrusion sensors — built so its output survives both a SOC analyst's workflow and a courtroom's scrutiny, not just a research demo.
+Vestrix turns commodity ESP32 hardware into through-wall presence/intrusion sensors — built so its output survives both a SOC analyst's workflow and a courtroom's scrutiny, not just a research demo.
 
-> WiFi CSI sensing itself is a mature, decade-old research field. That is **not** the novelty claim here. What's missing from the existing landscape — including the strongest open competitor, [RuView](https://github.com/ruvnet/ruview) — is a version of CSI sensing built like a security product: mutual authentication between sensor and collector, tamper-evident forensic logging, and native SOC/SIEM correlation. Sentrix's novelty is the **integration** of those three things, not the sensing technology.
+> WiFi CSI sensing itself is a mature, decade-old research field. That is **not** the novelty claim here. What's missing from the existing landscape — including the strongest open competitor, [RuView](https://github.com/ruvnet/ruview) — is a version of CSI sensing built like a security product: mutual authentication between sensor and collector, tamper-evident forensic logging, and native SOC/SIEM correlation. Vestrix's novelty is the **integration** of those three things, not the sensing technology.
 
 ## Status
 
 🚧 Pre-v0.1 — active development. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the full v0.1 → v1.0 plan and [`docs/NON-GOALS.md`](docs/NON-GOALS.md) for explicit scope boundaries.
 
-## Why Sentrix
+## Why Vestrix
 
 | Pillar | What it means |
 |---|---|
@@ -52,7 +52,7 @@ See [`docs/architecture.md`](docs/architecture.md) for the full write-up.
 ## Repository layout
 
 ```
-sentrix/
+vestrix/
 ├── firmware/          # ESP32 CSI capture firmware (ESP-IDF)
 ├── collector/         # mTLS ingest service
 ├── pipeline/          # Signal processing + feature extraction
@@ -80,7 +80,7 @@ pip install numpy scipy pandas scikit-learn xgboost shap cryptography
 
 ## Non-goals
 
-Sentrix is intentionally narrow. It does not try to match RuView's ~105-module breadth, and it is not a general-purpose WiFi sensing research platform. See [`docs/NON-GOALS.md`](docs/NON-GOALS.md).
+Vestrix is intentionally narrow. It does not try to match RuView's ~105-module breadth, and it is not a general-purpose WiFi sensing research platform. See [`docs/NON-GOALS.md`](docs/NON-GOALS.md).
 
 ## Contributing
 
@@ -92,4 +92,4 @@ Apache License 2.0 — see [`LICENSE`](LICENSE).
 
 ## Acknowledgements
 
-Sentrix builds on years of prior CSI-sensing work rather than re-deriving it, including the [ESP32-CSI-Tool](https://github.com/StevenMHernandez/ESP32-CSI-Tool) (Hernandez & Bulut), Espressif's official [esp-csi](https://github.com/espressif/esp-csi), and the broader WiFi sensing research community. See [`docs/standards-alignment.md`](docs/standards-alignment.md) for the full standards and prior-art map.
+Vestrix builds on years of prior CSI-sensing work rather than re-deriving it, including the [ESP32-CSI-Tool](https://github.com/StevenMHernandez/ESP32-CSI-Tool) (Hernandez & Bulut), Espressif's official [esp-csi](https://github.com/espressif/esp-csi), and the broader WiFi sensing research community. See [`docs/standards-alignment.md`](docs/standards-alignment.md) for the full standards and prior-art map.

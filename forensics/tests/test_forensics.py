@@ -32,11 +32,11 @@ EventFactory = Callable[[int], dict[str, Any]]
 
 
 def _configure_store(monkeypatch: pytest.MonkeyPatch, path: Path) -> None:
-    monkeypatch.setenv("SENTRIX_FORENSICS_STORE", str(path))
+    monkeypatch.setenv("VESTRIX_FORENSICS_STORE", str(path))
 
 
 def _process_writer(store_path: str, key_path: str, writer_id: int, count: int) -> None:
-    os.environ["SENTRIX_FORENSICS_STORE"] = store_path
+    os.environ["VESTRIX_FORENSICS_STORE"] = store_path
     signer = load_private_key(key_path)
     for offset in range(count):
         unique = writer_id * 1_000 + offset

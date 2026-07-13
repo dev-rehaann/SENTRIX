@@ -1,4 +1,4 @@
-"""Map the one canonical Sentrix alert dictionary to SOC output formats."""
+"""Map the one canonical Vestrix alert dictionary to SOC output formats."""
 
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ CanonicalAlert = TypedDict(
     "CanonicalAlert",
     {
         "schema_version": Literal["1.0"],
-        "source": Literal["sentrix"],
+        "source": Literal["vestrix"],
         "event_id": str,
         "ts_utc": str,
         "node_id": str,
@@ -108,8 +108,8 @@ def validate_alert(alert: Mapping[str, Any]) -> dict[str, Any]:
 
     if alert["schema_version"] != SOC_SCHEMA_VERSION:
         raise AlertValidationError("schema_version must be '1.0'")
-    if alert["source"] != "sentrix":
-        raise AlertValidationError("source must be 'sentrix'")
+    if alert["source"] != "vestrix":
+        raise AlertValidationError("source must be 'vestrix'")
     for field in ("event_id", "node_id", "site_id", "zone_id", "model_id"):
         _require_nonempty_string(alert[field], field)
 
@@ -158,7 +158,7 @@ def validate_alert(alert: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def to_wazuh(alert: Mapping[str, Any]) -> dict[str, Any]:
-    """Return the flat JSON shape consumed by the Sentrix Wazuh decoder."""
+    """Return the flat JSON shape consumed by the Vestrix Wazuh decoder."""
     canonical = validate_alert(alert)
     top_shap = canonical.pop("top_shap")
     output = {key: value for key, value in canonical.items() if value is not None}
@@ -205,21 +205,21 @@ def to_ocsf(alert: Mapping[str, Any]) -> dict[str, Any]:
         "metadata": {
             "version": OCSF_VERSION,
             "product": {
-                "name": "Sentrix",
-                "vendor_name": "Sentrix",
+                "name": "Vestrix",
+                "vendor_name": "Vestrix",
                 "version": SOC_SCHEMA_VERSION,
             },
             "original_event_uid": canonical["event_id"],
             "original_time": canonical["ts_utc"],
-            "log_name": "sentrix-alerts",
-            "log_provider": "Sentrix",
-            "source": "Sentrix canonical SOC alert",
+            "log_name": "vestrix-alerts",
+            "log_provider": "Vestrix",
+            "source": "Vestrix canonical SOC alert",
         },
         "finding_info": {
             "uid": canonical["event_id"],
             "title": title,
             "desc": (
-                f"Sentrix classified physical activity as {event_class} in "
+                f"Vestrix classified physical activity as {event_class} in "
                 f"{canonical['site_id']}/{canonical['zone_id']}."
             ),
             "analytic": {
@@ -235,9 +235,9 @@ def to_ocsf(alert: Mapping[str, Any]) -> dict[str, Any]:
             "name": canonical["node_id"],
             "type_id": 99,
             "type": "WiFi CSI sensor",
-            "vendor_name": "Sentrix",
+            "vendor_name": "Vestrix",
         },
-        "unmapped": {"sentrix": canonical},
+        "unmapped": {"vestrix": canonical},
     }
     return event
 
@@ -261,12 +261,12 @@ def _title(alert: Mapping[str, Any]) -> str:
     event_class = alert["class"]
     zone = f"{alert['site_id']}/{alert['zone_id']}"
     if event_class == "sensor_tamper":
-        return f"Sentrix sensor tamper detected at {zone}"
+        return f"Vestrix sensor tamper detected at {zone}"
     if event_class == "normal":
-        return f"Sentrix benign physical activity at {zone}"
+        return f"Vestrix benign physical activity at {zone}"
     if alert["pacs_event_status"] == "missing":
-        return f"Sentrix intrusion without corresponding PACS event at {zone}"
-    return f"Sentrix physical intrusion detected at {zone}"
+        return f"Vestrix intrusion without corresponding PACS event at {zone}"
+    return f"Vestrix physical intrusion detected at {zone}"
 
 
 def _to_epoch_millis(value: str) -> int:

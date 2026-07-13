@@ -1,4 +1,4 @@
-"""Sentrix tamper-evident forensic event logging."""
+"""Vestrix tamper-evident forensic event logging."""
 
 from .chain_check import ChainVerificationError, VerificationResult, verify_chain
 from .logger import log_event

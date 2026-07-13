@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "source": "sentrix",
-  "event_id": "sentrix-20260713T201801Z-node-11-0045",
+  "source": "vestrix",
+  "event_id": "vestrix-20260713T201801Z-node-11-0045",
   "ts_utc": "2026-07-13T20:18:01Z",
   "node_id": "node-11",
   "site_id": "warehouse-lahore",

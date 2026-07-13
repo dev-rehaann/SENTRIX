@@ -337,18 +337,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd"
 
 [[package]]
-name = "sentrix-verifier-cli"
-version = "0.1.0"
-dependencies = [
- "clap",
- "ed25519-dalek",
- "ryu",
- "serde",
- "serde_json",
- "sha2",
-]
-
-[[package]]
 name = "serde"
 version = "1.0.228"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -466,6 +454,18 @@ name = "version_check"
 version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
+
+[[package]]
+name = "vestrix-verifier-cli"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "ed25519-dalek",
+ "ryu",
+ "serde",
+ "serde_json",
+ "sha2",
+]
 
 [[package]]
 name = "wasi"

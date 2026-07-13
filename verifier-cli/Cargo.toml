@@ -1,13 +1,13 @@
 [package]
-name = "sentrix-verifier-cli"
+name = "vestrix-verifier-cli"
 version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0"
-description = "Independent verifier for Sentrix forensic hash chains"
+description = "Independent verifier for Vestrix forensic hash chains"
 publish = false
 
 [[bin]]
-name = "sentrix-verify"
+name = "vestrix-verify"
 path = "src/main.rs"
 
 [dependencies]
